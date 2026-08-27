@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <style>
+    :root { --ink:#18212f; --red:#d92f45; --yellow:#ffd84d; --cyan:#e5f8f8; }
+    * { box-sizing: border-box; }
+    body { margin:0; padding:14px; color:var(--ink); background:#fff9dc; font-family:system-ui,"Noto Sans TC",sans-serif; }
+    header { padding:16px; color:white; background:linear-gradient(135deg,#ff7338,var(--red)); border:2px solid var(--ink); border-radius:14px; box-shadow:3px 3px 0 var(--ink); }
+    h1 { margin:0; font-size:18px; line-height:1.35; }
+    header p { margin:5px 0 0; font-size:12px; font-weight:700; }
+    label { display:block; margin:18px 0 7px; font-size:13px; font-weight:900; }
+    input, button { width:100%; border:2px solid var(--ink); border-radius:9px; padding:10px; font:inherit; }
+    input { background:white; font-weight:700; outline:none; }
+    input:focus { box-shadow:0 0 0 3px rgb(255 216 77 / .65); }
+    button { margin-top:8px; background:var(--yellow); font-weight:900; cursor:pointer; box-shadow:2px 2px 0 var(--ink); }
+    button:disabled { opacity:.6; cursor:wait; }
+    #message { margin-top:14px; text-align:center; font-size:13px; font-weight:800; }
+    .card { margin-top:14px; padding:13px; background:white; border:2px solid var(--ink); border-radius:11px; box-shadow:3px 3px 0 var(--ink); }
+    .tag { display:inline-block; padding:3px 8px; background:var(--yellow); border:1.5px solid var(--ink); border-radius:999px; font-size:11px; font-weight:900; }
+    h2 { margin:8px 0 2px; font-size:18px; }
+    .title, .source { color:#65707d; font-size:11px; font-weight:700; }
+    dl { display:grid; grid-template-columns:auto 1fr; gap:5px 8px; margin:12px 0; font-size:12px; }
+    dt { font-weight:900; }
+    dd { margin:0; }
+    .task { padding:10px; background:var(--cyan); border:1.5px solid var(--ink); border-radius:8px; font-size:12px; white-space:pre-line; line-height:1.55; }
+    .source { margin-top:7px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🚨 陽明高中<br>防災應變任務查詢</h1>
+    <p>115學年度緊急應變小組</p>
+  </header>
+  <label for="nameInput">教職員完整姓名</label>
+  <input id="nameInput" maxlength="20" autocomplete="off" placeholder="請至少輸入 2 個字">
+  <button id="searchButton" type="button">⚡ 查詢我的任務</button>
+  <div id="message" role="status" aria-live="polite"></div>
+  <div id="results"></div>
+
+  <script>
+    const input = document.querySelector('#nameInput');
+    const button = document.querySelector('#searchButton');
+    const message = document.querySelector('#message');
+    const results = document.querySelector('#results');
+
+    const node = (tag, className, text) => {
+      const item = document.createElement(tag);
+      if (className) item.className = className;
+      if (text !== undefined) item.textContent = text;
+      return item;
+    };
+
+    function makeCard(item) {
+      const card = node('article', 'card');
+      card.append(node('span', 'tag', item.group), node('h2', '', item.name), node('div', 'title', item.title));
+      const facts = node('dl');
+      [['自衛消防', item.fireGroup], ['編組職務', item.role]].forEach(pair => {
+        facts.append(node('dt', '', pair[0]), node('dd', '', pair[1]));
+      });
+      card.append(facts, node('div', 'task', item.detail), node('div', 'source', '名冊來源：' + item.source));
+      return card;
+    }
+
+    function showResults(items) {
+      button.disabled = false;
+      results.replaceChildren();
+      if (!items || !items.length) {
+        message.textContent = '查無符合資料，請確認姓名。';
+        return;
+      }
+      message.textContent = '找到 ' + items.length + ' 項應變任務';
+      items.forEach(item => results.append(makeCard(item)));
+    }
+
+    function showError(error) {
+      button.disabled = false;
+      message.textContent = '查詢失敗：' + (error && error.message ? error.message : '請稍後再試');
+    }
+
+    function search() {
+      const query = input.value.trim();
+      results.replaceChildren();
+      if (query.replace(/\s+/g, '').length < 2) {
+        message.textContent = '請至少輸入 2 個字。';
+        input.focus();
+        return;
+      }
+      button.disabled = true;
+      message.textContent = '⏳ 搜尋中…';
+      google.script.run.withSuccessHandler(showResults).withFailureHandler(showError).searchTeacherTask(query);
+    }
+
+    button.addEventListener('click', search);
+    input.addEventListener('keydown', event => { if (event.key === 'Enter') search(); });
+  </script>
+</body>
+</html>

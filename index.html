@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="臺北市立陽明高級中學 115學年度防災應變任務查詢系統">
+  <title>陽明高中 115學年度防災應變任務查詢</title>
+  <style>
+    :root {
+      --ink: #18212f;
+      --muted: #5f6976;
+      --paper: #fffdf5;
+      --red: #d92f45;
+      --orange: #ff7338;
+      --yellow: #ffd84d;
+      --cyan: #55d8e6;
+      --line: 3px solid var(--ink);
+      --shadow: 6px 6px 0 var(--ink);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: system-ui, -apple-system, "Noto Sans TC", "PingFang TC", sans-serif;
+      background-color: #fff7cf;
+      background-image: radial-gradient(#efc84d 1.2px, transparent 1.2px);
+      background-size: 18px 18px;
+    }
+    button, input { font: inherit; }
+    .shell { width: min(900px, calc(100% - 28px)); margin: 0 auto; padding: 28px 0 48px; }
+    .hero, .panel, .result-card, .notice {
+      border: var(--line);
+      box-shadow: var(--shadow);
+      border-radius: 22px;
+    }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(26px, 5vw, 48px);
+      color: white;
+      background: linear-gradient(135deg, var(--orange), var(--red));
+    }
+    .hero::after {
+      content: "READY";
+      position: absolute;
+      right: -12px;
+      bottom: -35px;
+      font-weight: 950;
+      font-size: clamp(6rem, 18vw, 11rem);
+      color: rgb(255 255 255 / .12);
+      transform: rotate(-7deg);
+    }
+    .eyebrow {
+      display: inline-block;
+      position: relative;
+      z-index: 1;
+      padding: 7px 14px;
+      color: var(--ink);
+      background: var(--yellow);
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      font-size: .86rem;
+      font-weight: 900;
+      transform: rotate(-1deg);
+    }
+    h1 { position: relative; z-index: 1; margin: 16px 0 10px; font-size: clamp(1.8rem, 5vw, 3rem); line-height: 1.18; text-shadow: 3px 3px 0 var(--ink); }
+    .hero p { position: relative; z-index: 1; max-width: 650px; margin: 0; font-weight: 700; }
+    .panel { margin-top: 26px; padding: clamp(20px, 4vw, 30px); background: white; }
+    .panel label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 1.08rem; }
+    .search-row { display: flex; gap: 12px; }
+    input {
+      min-width: 0;
+      flex: 1;
+      border: var(--line);
+      border-radius: 13px;
+      padding: 14px 16px;
+      font-size: 1.06rem;
+      font-weight: 750;
+      outline: none;
+    }
+    input:focus { box-shadow: 0 0 0 4px rgb(255 216 77 / .7); }
+    .search-button {
+      border: var(--line);
+      border-radius: 13px;
+      padding: 12px 22px;
+      background: var(--yellow);
+      color: var(--ink);
+      font-weight: 950;
+      cursor: pointer;
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+    .search-button:hover { background: #ffe376; transform: translateY(-1px); }
+    .search-button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+    .helper { margin: 12px 0 0; color: var(--muted); font-size: .88rem; }
+    .status { min-height: 26px; margin: 22px 2px 12px; font-weight: 800; }
+    .results { display: grid; gap: 18px; }
+    .result-card { overflow: hidden; background: white; animation: reveal .22s ease-out; }
+    @keyframes reveal { from { opacity: 0; transform: translateY(7px); } }
+    .card-top { display: flex; gap: 15px; align-items: center; padding: 20px; border-bottom: 2px dashed #cfd5dc; }
+    .avatar { display: grid; place-items: center; width: 58px; height: 58px; border: var(--line); border-radius: 50%; font-size: 1.7rem; flex: 0 0 auto; }
+    .name { margin: 0; font-size: 1.5rem; }
+    .title { margin-top: 2px; color: var(--muted); font-weight: 700; }
+    .card-body { padding: 20px; }
+    .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .fact { min-width: 0; padding: 12px; background: #fff8dc; border: 2px solid var(--ink); border-radius: 12px; }
+    .fact span { display: block; color: #a53b17; font-size: .77rem; font-weight: 900; }
+    .fact strong { display: block; margin-top: 3px; overflow-wrap: anywhere; }
+    .task { margin-top: 13px; padding: 15px; background: #e5f8f8; border: 2px solid var(--ink); border-radius: 12px; }
+    .task h3 { margin: 0 0 8px; color: #075d60; font-size: 1rem; }
+    .task ul { margin: 0; padding-left: 1.25rem; }
+    .task li + li { margin-top: 5px; }
+    .source { margin: 10px 2px 0; color: var(--muted); font-size: .75rem; }
+    .notice { display: none; padding: 20px; background: #fff0f1; text-align: center; font-weight: 850; }
+    footer { margin-top: 34px; text-align: center; color: #69717b; font-size: .82rem; }
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 20px, 900px); padding-top: 12px; }
+      .hero, .panel, .result-card, .notice { border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); }
+      .search-row { flex-direction: column; }
+      .search-button { width: 100%; }
+      .facts { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; animation: none !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <span class="eyebrow">⚡ 防災特攻隊 · READY</span>
+      <h1>臺北市立陽明高級中學<br>115學年度防災應變任務查詢</h1>
+      <p>輸入教職員完整姓名，立即查看緊急應變小組、自衛消防編組與負責任務。</p>
+    </header>
+
+    <section class="panel" aria-labelledby="search-label">
+      <label id="search-label" for="name-input">🔎 教職員姓名</label>
+      <div class="search-row">
+        <input id="name-input" type="search" maxlength="20" autocomplete="off" placeholder="請輸入完整姓名" aria-describedby="search-help">
+        <button id="search-button" class="search-button" type="button">查詢任務</button>
+      </div>
+      <p id="search-help" class="helper">為避免顯示過多名單，請至少輸入 2 個字；同一人若有多項任務會全部列出。</p>
+    </section>
+
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <div id="notice" class="notice" role="alert"></div>
+    <section id="results" class="results" aria-label="查詢結果"></section>
+
+    <footer>資料來源：115學年度緊急應變小組分組表（115.08.21 編製）</footer>
+  </main>
+
+  <script src="staff-data.js"></script>
+  <script>
+    (() => {
+      const data = Array.isArray(window.STAFF_DATA) ? window.STAFF_DATA : [];
+      const input = document.querySelector('#name-input');
+      const button = document.querySelector('#search-button');
+      const status = document.querySelector('#status');
+      const notice = document.querySelector('#notice');
+      const results = document.querySelector('#results');
+      const colors = { 指揮部: '#ffd84d', 搶救組: '#ff7338', 通報組: '#55c8ee', 避難引導組: '#77d77c', 安全防護組: '#c48ae6', 緊急救護組: '#ff78a5' };
+      const icons = { 指揮部: '★', 搶救組: '🧯', 通報組: '📣', 避難引導組: '➜', 安全防護組: '🛡', 緊急救護組: '✚' };
+
+      const el = (tag, className, text) => {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      };
+
+      function fact(label, value) {
+        const box = el('div', 'fact');
+        box.append(el('span', '', label), el('strong', '', value || '-'));
+        return box;
+      }
+
+      function card(item) {
+        const article = el('article', 'result-card');
+        const top = el('div', 'card-top');
+        const avatar = el('div', 'avatar', icons[item.group] || '⚡');
+        avatar.style.backgroundColor = colors[item.group] || '#ffd84d';
+        const identity = el('div');
+        identity.append(el('h2', 'name', item.name), el('div', 'title', item.title));
+        top.append(avatar, identity);
+
+        const body = el('div', 'card-body');
+        const facts = el('div', 'facts');
+        facts.append(fact('緊急應變小組', item.group), fact('自衛消防編組', item.fireGroup), fact('編組職務', item.role));
+        const task = el('div', 'task');
+        task.append(el('h3', '', '負責工作與緊急防救災任務'));
+        const list = el('ul');
+        String(item.detail || '-').split(/\r?\n/).filter(Boolean).forEach(line => list.append(el('li', '', line)));
+        task.append(list);
+        body.append(facts, task, el('div', 'source', `名冊來源：${item.source}`));
+        article.append(top, body);
+        return article;
+      }
+
+      function search() {
+        const query = input.value.trim().replace(/\s+/g, '');
+        results.replaceChildren();
+        notice.style.display = 'none';
+        if (query.length < 2) {
+          status.textContent = '';
+          notice.textContent = '請至少輸入 2 個字的姓名。';
+          notice.style.display = 'block';
+          input.focus();
+          return;
+        }
+        const matches = data.filter(item => item.name.replace(/\s+/g, '').includes(query));
+        if (!matches.length) {
+          status.textContent = '';
+          notice.textContent = '查無符合資料，請確認姓名是否正確。';
+          notice.style.display = 'block';
+          return;
+        }
+        const people = new Set(matches.map(item => item.name)).size;
+        status.textContent = `找到 ${people} 位人員，共 ${matches.length} 項應變任務`;
+        matches.forEach(item => results.append(card(item)));
+        results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      button.addEventListener('click', search);
+      input.addEventListener('keydown', event => { if (event.key === 'Enter') search(); });
+      if (!data.length) {
+        notice.textContent = '名冊資料載入失敗，請確認 staff-data.js 已與本頁一同部署。';
+        notice.style.display = 'block';
+        button.disabled = true;
+      }
+    })();
+  </script>
+</body>
+</html>

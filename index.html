@@ -112,6 +112,13 @@
     .task li + li { margin-top: 5px; }
     .source { margin: 10px 2px 0; color: var(--muted); font-size: .75rem; }
     .notice { display: none; padding: 20px; background: #fff0f1; text-align: center; font-weight: 850; }
+    .video-card { margin-top: 34px; padding: clamp(18px, 4vw, 26px); background: white; border: var(--line); box-shadow: var(--shadow); border-radius: 22px; }
+    .video-card h2 { margin: 0 0 5px; font-size: 1.28rem; }
+    .video-card p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
+    .video-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #111; border: 2px solid var(--ink); border-radius: 13px; }
+    .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .video-link { display: inline-block; margin-top: 10px; color: #315f8e; font-size: .83rem; font-weight: 750; text-underline-offset: 2px; }
+    .video-link:hover { color: var(--red); }
     .legal-basis { margin-top: 34px; padding: 12px 14px; color: #69717b; background: rgb(255 255 255 / .72); border: 1px solid #c9cfd6; border-radius: 10px; font-size: .78rem; line-height: 1.7; text-align: center; }
     .legal-basis strong { color: #4d5661; }
     .legal-basis a { color: #315f8e; text-underline-offset: 2px; }
@@ -119,7 +126,7 @@
     footer { margin-top: 34px; text-align: center; color: #69717b; font-size: .82rem; }
     @media (max-width: 620px) {
       .shell { width: min(100% - 20px, 900px); padding-top: 12px; }
-      .hero, .panel, .result-card, .notice { border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); }
+      .hero, .panel, .result-card, .notice, .video-card { border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); }
       .search-row { flex-direction: column; }
       .search-button { width: 100%; }
       .facts { grid-template-columns: 1fr; }
@@ -147,6 +154,21 @@
     <div id="status" class="status" role="status" aria-live="polite"></div>
     <div id="notice" class="notice" role="alert"></div>
     <section id="results" class="results" aria-label="查詢結果"></section>
+
+    <section class="video-card" aria-labelledby="video-title">
+      <h2 id="video-title">🎬 防災宣導影片</h2>
+      <p>115年地震避難趴掩穩影片｜臺北市防災教育輔導團</p>
+      <div class="video-frame">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/33Gu3PKLKpg"
+          title="115年地震避難趴掩穩影片"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+      </div>
+      <a class="video-link" href="https://youtu.be/33Gu3PKLKpg?si=Qjt_we2Qkr0mWKnD" target="_blank" rel="noopener noreferrer">無法播放時，請前往 YouTube 觀看 ↗</a>
+    </section>
 
     <aside class="legal-basis" aria-label="法源依據與防災參考">
       <strong>法源依據與防災參考：</strong>

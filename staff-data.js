@@ -1727,5 +1727,14 @@ window.STAFF_DATA = [
     "role": "組員",
     "detail": "同安全防護組負責工作（詳見首列說明）",
     "source": "附表三_國中專任"
+  },
+  {
+    "name": "張安莛",
+    "title": "秘書",
+    "group": "緊急救護組",
+    "fireGroup": "救護班",
+    "role": "組長",
+    "detail": "尚待補充",
+    "source": "補充資料"
   }
 ];

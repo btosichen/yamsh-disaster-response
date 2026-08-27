@@ -5,7 +5,18 @@ const CONFIG = {
     { sheet: '附表二_國高中導師', group: '避難引導組', fireGroup: '避難引導班' },
     { sheet: '附表三_國中專任', group: '安全防護組', fireGroup: '安全防護班' }
   ],
-  placeholders: ['高中專任（含外師）', '國高中導師', '國中專任']
+  placeholders: ['高中專任（含外師）', '國高中導師', '國中專任'],
+  extraRecords: [
+    {
+      name: '張安莛',
+      title: '秘書',
+      group: '緊急救護組',
+      fireGroup: '救護班',
+      role: '組長',
+      detail: '尚待補充',
+      source: '補充資料'
+    }
+  ]
 };
 
 function onOpen() {
@@ -80,6 +91,15 @@ function searchTeacherTask(searchName) {
         source: config.sheet
       });
     }
+  });
+
+  CONFIG.extraRecords.forEach(function (record) {
+    if (record.name.replace(/\s+/g, '').indexOf(query) === -1) return;
+    const duplicate = results.some(function (item) {
+      return item.name === record.name && item.group === record.group &&
+        item.fireGroup === record.fireGroup && item.role === record.role;
+    });
+    if (!duplicate) results.push(record);
   });
 
   return results;

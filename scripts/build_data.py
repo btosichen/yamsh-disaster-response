@@ -20,6 +20,17 @@ ANNEXES = {
     "附表三_國中專任": ("安全防護組", "安全防護班"),
 }
 PLACEHOLDER_NAMES = {"高中專任（含外師）", "國高中導師", "國中專任"}
+MANUAL_RECORDS = [
+    {
+        "name": "張安莛",
+        "title": "秘書",
+        "group": "緊急救護組",
+        "fireGroup": "救護班",
+        "role": "組長",
+        "detail": "尚待補充",
+        "source": "補充資料",
+    }
+]
 
 
 def text(value: object, fallback: str = "-") -> str:
@@ -76,6 +87,15 @@ def read_records(path: Path) -> list[dict[str, str]]:
                     "source": sheet_name,
                 }
             )
+
+    existing_keys = {
+        (record["name"], record["group"], record["fireGroup"], record["role"])
+        for record in records
+    }
+    for record in MANUAL_RECORDS:
+        key = (record["name"], record["group"], record["fireGroup"], record["role"])
+        if key not in existing_keys:
+            records.append(record.copy())
 
     return records
 

@@ -112,6 +112,10 @@
     .task li + li { margin-top: 5px; }
     .source { margin: 10px 2px 0; color: var(--muted); font-size: .75rem; }
     .notice { display: none; padding: 20px; background: #fff0f1; text-align: center; font-weight: 850; }
+    .legal-basis { margin-top: 34px; padding: 12px 14px; color: #69717b; background: rgb(255 255 255 / .72); border: 1px solid #c9cfd6; border-radius: 10px; font-size: .78rem; line-height: 1.7; text-align: center; }
+    .legal-basis strong { color: #4d5661; }
+    .legal-basis a { color: #315f8e; text-underline-offset: 2px; }
+    .legal-basis a:hover { color: var(--red); }
     footer { margin-top: 34px; text-align: center; color: #69717b; font-size: .82rem; }
     @media (max-width: 620px) {
       .shell { width: min(100% - 20px, 900px); padding-top: 12px; }
@@ -143,6 +147,14 @@
     <div id="status" class="status" role="status" aria-live="polite"></div>
     <div id="notice" class="notice" role="alert"></div>
     <section id="results" class="results" aria-label="查詢結果"></section>
+
+    <aside class="legal-basis" aria-label="法源依據與防災參考">
+      <strong>法源依據與防災參考：</strong>
+      <a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=D0120014" target="_blank" rel="noopener noreferrer">災害防救法</a>、
+      <a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=D0120001" target="_blank" rel="noopener noreferrer">消防法</a>、
+      <a href="https://disaster.moe.edu.tw/WebMoeInfo/FormPageViews/Campus/Proposal/DisasterProposal.aspx" target="_blank" rel="noopener noreferrer">教育部防災校園專區</a>、
+      <a href="https://eoc.gov.taipei/" target="_blank" rel="noopener noreferrer">臺北市政府「防災臺北」</a>
+    </aside>
 
     <footer>資料來源：115學年度緊急應變小組分組表（115.08.21 編製）</footer>
   </main>

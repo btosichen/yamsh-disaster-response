@@ -120,6 +120,54 @@
     .task li + li { margin-top: 5px; }
     .source { margin: 10px 2px 0; color: var(--muted); font-size: .75rem; }
     .notice { display: none; padding: 20px; background: #fff0f1; text-align: center; font-weight: 850; }
+    .teacher-guide { margin-top: 34px; padding: clamp(20px, 4vw, 30px); background: white; border: var(--line); box-shadow: var(--shadow); border-radius: 22px; }
+    .teacher-guide-head .section-label { display: inline-block; padding: 5px 10px; color: var(--ink); background: var(--cyan); border: 2px solid var(--ink); border-radius: 999px; font-size: .75rem; font-weight: 950; }
+    .teacher-guide-head h2 { margin: 10px 0 7px; font-size: clamp(1.5rem, 4vw, 2.05rem); }
+    .teacher-guide-head p { margin: 0; color: var(--muted); line-height: 1.65; }
+    .teacher-lead { margin-top: 18px; padding: 17px 19px; color: white; background: linear-gradient(135deg, #18537b, #0b7891); border: 3px solid var(--ink); border-radius: 14px; font-size: 1.08rem; font-weight: 850; line-height: 1.65; }
+    .guide-principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 13px; }
+    .principle { padding: 12px; background: #fff8dc; border: 2px solid var(--ink); border-radius: 12px; text-align: center; }
+    .principle strong { display: block; color: #a53b17; font-size: 1rem; }
+    .principle span { display: block; margin-top: 3px; color: var(--muted); font-size: .8rem; }
+    .edu-module { margin-top: 25px; padding-top: 21px; border-top: 2px dashed #cbd2da; }
+    .module-title { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 13px; font-size: 1.2rem; }
+    .module-no { display: inline-grid; place-items: center; flex: 0 0 auto; width: 32px; height: 32px; color: var(--ink); background: var(--yellow); border: 2px solid var(--ink); border-radius: 9px; font-size: .8rem; }
+    .module-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 13px; }
+    .concept-card { padding: 15px; background: #f7f9fb; border: 2px solid var(--ink); border-radius: 13px; }
+    .concept-card h4 { margin: 0 0 8px; color: #18537b; font-size: 1rem; }
+    .concept-card p { margin: 6px 0; line-height: 1.65; }
+    .concept-card ul { margin: 0; padding-left: 1.2rem; line-height: 1.65; }
+    .concept-card li + li { margin-top: 5px; }
+    .share-label { margin: 14px 0 7px; font-size: .86rem; font-weight: 900; }
+    .share-bar { display: flex; overflow: hidden; min-height: 45px; border: 2px solid var(--ink); border-radius: 10px; }
+    .share-bar span { display: grid; place-items: center; min-width: 0; color: var(--ink); font-size: .78rem; font-weight: 950; text-align: center; }
+    .share-self { flex: 7; background: #ffd84d; }
+    .share-mutual { flex: 2; background: #77d77c; }
+    .share-public { flex: 1; background: #55c8ee; }
+    .stage-table-wrap { overflow-x: auto; border: 2px solid var(--ink); border-radius: 13px; }
+    .stage-table { width: 100%; min-width: 680px; border-collapse: collapse; background: white; }
+    .stage-table th, .stage-table td { padding: 11px 12px; border-bottom: 1px solid #cfd5dc; vertical-align: top; text-align: left; line-height: 1.55; }
+    .stage-table th { color: white; background: #18537b; font-size: .84rem; }
+    .stage-table tr:last-child td { border-bottom: 0; }
+    .stage-table td:first-child { width: 82px; font-weight: 950; }
+    .stage-table td:nth-child(2) { width: 150px; color: #075d60; font-weight: 900; }
+    .stage-focus td { background: #fff4bd; }
+    .stage-focus td:first-child::after { content: "本校重點"; display: block; width: max-content; margin-top: 4px; padding: 2px 5px; color: white; background: var(--red); border-radius: 5px; font-size: .62rem; }
+    .stage-table ul { margin: 0; padding-left: 1.1rem; }
+    .drill-alert { margin-bottom: 13px; padding: 14px 16px; color: #7c1728; background: #fff0f1; border: 3px solid var(--red); border-radius: 12px; font-size: 1.02rem; font-weight: 900; line-height: 1.6; }
+    .technique-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; margin-top: 13px; }
+    .technique { padding: 14px; background: #eefbfc; border: 2px solid var(--ink); border-radius: 12px; }
+    .technique strong { display: block; margin-bottom: 5px; color: #075d60; }
+    .technique p { margin: 0; color: #46515e; font-size: .85rem; line-height: 1.6; }
+    .cycle-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .cycle-card { padding: 13px; background: var(--cycle-color, #fff8dc); border: 2px solid var(--ink); border-radius: 12px; }
+    .cycle-card strong { display: block; margin-bottom: 5px; font-size: 1rem; }
+    .cycle-card small { display: block; margin-bottom: 7px; color: var(--muted); font-weight: 800; }
+    .cycle-card p { margin: 0; font-size: .83rem; line-height: 1.55; }
+    .org-brief { margin-top: 14px; padding: 15px; background: #f3efff; border: 2px solid var(--ink); border-radius: 13px; }
+    .org-brief h4 { margin: 0 0 9px; color: #573b82; }
+    .org-brief ul { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px 20px; margin: 0; padding-left: 1.2rem; line-height: 1.55; }
+    .mission-jump { display: inline-block; margin-top: 12px; color: #315f8e; font-size: .84rem; font-weight: 850; text-underline-offset: 2px; }
     .mission-handbook { margin-top: 34px; padding: clamp(20px, 4vw, 30px); background: white; border: var(--line); box-shadow: var(--shadow); border-radius: 22px; }
     .mission-heading { margin-bottom: 20px; }
     .mission-heading .section-label { display: inline-block; padding: 5px 10px; color: white; background: var(--red); border: 2px solid var(--ink); border-radius: 999px; font-size: .75rem; font-weight: 950; letter-spacing: .04em; }
@@ -170,10 +218,12 @@
     .design-credit { margin-top: 5px; color: #4d5661; font-weight: 750; }
     @media (max-width: 620px) {
       .shell { width: min(100% - 20px, 900px); padding-top: 12px; }
-      .hero, .panel, .result-card, .notice, .mission-handbook, .video-card { border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); }
+      .hero, .panel, .result-card, .notice, .teacher-guide, .mission-handbook, .video-card { border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); }
       .search-row { flex-direction: column; }
       .search-button { width: 100%; }
       .facts { grid-template-columns: 1fr; }
+      .guide-principles, .module-grid, .technique-grid, .org-brief ul { grid-template-columns: 1fr; }
+      .cycle-grid { grid-template-columns: repeat(2, 1fr); }
       .command-grid, .team-grid { grid-template-columns: 1fr; }
       .command-card.commander { transform: none; }
     }
@@ -206,6 +256,107 @@
     <div id="status" class="status" role="status" aria-live="polite"></div>
     <div id="notice" class="notice" role="alert"></div>
     <section id="results" class="results" aria-label="查詢結果"></section>
+
+    <section class="teacher-guide" aria-labelledby="teacher-guide-title">
+      <header class="teacher-guide-head">
+        <span class="section-label">👩‍🏫 教師防災重點 · SCHOOL SAFETY</span>
+        <h2 id="teacher-guide-title">老師為什麼要懂防災？</h2>
+        <p>防災教育的目標不是背熟一套口令，而是讓師生面對不同災情時，能判斷、自救、互助並恢復正常學習。</p>
+      </header>
+
+      <div class="teacher-lead">防災不是多一項行政工作，而是讓師生在關鍵幾分鐘內做出正確判斷的日常教育。老師的角色，是協助學生把安全原則練成真正用得上的能力。</div>
+
+      <div class="guide-principles" aria-label="教師防災三大提醒">
+        <div class="principle"><strong>協助，不是包辦</strong><span>學生學會保護自己，老師提供引導與支援</span></div>
+        <div class="principle"><strong>判斷，不是死背</strong><span>依情境運用原則，而非等待唯一標準答案</span></div>
+        <div class="principle"><strong>演練，不是演戲</strong><span>把正確動作練成壓力下仍能使用的習慣</span></div>
+      </div>
+
+      <section class="edu-module" aria-labelledby="module-one-title">
+        <h3 class="module-title" id="module-one-title"><span class="module-no">01</span>核心觀念轉變：為什麼學校必須重視？</h3>
+        <div class="module-grid">
+          <article class="concept-card">
+            <h4>🌧 氣候變遷與臺灣在地風險</h4>
+            <ul>
+              <li><strong>極端氣候常態化：</strong>海平面上升、極端降雨與高溫事件增加。</li>
+              <li><strong>自然環境限制：</strong>臺灣山高谷深、斷層密集，汛期長達 5 至 11 月。</li>
+              <li><strong>複合風險升高：</strong>氣候變遷與土地超限利用交互影響，巨災威脅持續增加。</li>
+            </ul>
+          </article>
+          <article class="concept-card">
+            <h4>🔄 防災教育的關鍵翻轉</h4>
+            <ul>
+              <li><strong>從「保護」到「協助」：</strong>學生學會保護自己，老師給予協助。</li>
+              <li><strong>從「標準答案」到「判斷原則」：</strong>培養情境想像與臨場判斷能力。</li>
+              <li><strong>從「等救援」到「共同承擔」：</strong>先自助、再共助，最後銜接公助。</li>
+            </ul>
+          </article>
+        </div>
+        <p class="share-label">責任分擔速記：自助 70%・共助 20%・公助 10%</p>
+        <div class="share-bar" aria-label="自助百分之七十、共助百分之二十、公助百分之十">
+          <span class="share-self">自助 70%</span><span class="share-mutual">共助 20%</span><span class="share-public">公助 10%</span>
+        </div>
+      </section>
+
+      <section class="edu-module" aria-labelledby="module-two-title">
+        <h3 class="module-title" id="module-two-title"><span class="module-no">02</span>各學階防災教育定位：國中與高中是本校重點</h3>
+        <div class="stage-table-wrap">
+          <table class="stage-table">
+            <thead><tr><th>學習階段</th><th>核心定位</th><th>具體任務與教學重點</th></tr></thead>
+            <tbody>
+              <tr><td>幼兒園</td><td>安全意識</td><td>建立基本安全感，知道配合老師指導進行避難掩蔽。</td></tr>
+              <tr><td>國小</td><td>懂災害、會判斷</td><td>認識周遭災害歷史與潛勢，學習看懂防災地圖與避難判斷。</td></tr>
+              <tr class="stage-focus"><td>國中</td><td>能自救、會互助</td><td><ul><li><strong>自救防護：</strong>熟練趴下、掩護、穩住（Drop, Cover, Hold on）、箱式呼吸與緊急退路選擇。</li><li><strong>同儕互助：</strong>學習基礎止血救護、協助同學疏散，克服社交惰性與多元無知。</li></ul></td></tr>
+              <tr class="stage-focus"><td>高中</td><td>協助學校、社區</td><td><ul><li><strong>支援校園應變：</strong>擔任通報、避難引導、救護等青年幹部或志工。</li><li><strong>社區防災橋樑：</strong>運用青年熱情與體能，支援社區自主防災與避難收容所運作。</li></ul></td></tr>
+              <tr><td>大學</td><td>自主規劃及運作</td><td>具備防災計畫撰寫、兵棋推演規劃與獨立避難運作能力。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="edu-module" aria-labelledby="module-three-title">
+        <h3 class="module-title" id="module-three-title"><span class="module-no">03</span>心理學與大腦機制：為什麼演練不能當演戲？</h3>
+        <div class="drill-alert">⚠ 演練的真正目的，是在大腦緊張、混亂甚至「凍結」時，仍能靠練習過的動作與判斷原則保護自己與學生。</div>
+        <div class="module-grid">
+          <article class="concept-card">
+            <h4>杏仁核劫持（Amygdala Hijack）</h4>
+            <p>極端恐懼下，前額葉的邏輯判斷能力可能像「斷電」，直覺系統接管行動。若平時沒有形成肌肉記憶，臨災容易出現凍結反應或隧道視野。</p>
+          </article>
+          <article class="concept-card">
+            <h4>常態偏誤與詮釋延遲</h4>
+            <p>大腦傾向用舊經驗解釋新威脅，例如把槍響當爆竹、把濃煙當烤肉味，因而延誤警覺與逃生時間。</p>
+          </article>
+        </div>
+        <div class="technique-grid" aria-label="三項應變關鍵技術">
+          <article class="technique"><strong>🫁 箱式呼吸</strong><p>吸氣 4 秒、憋氣 4 秒、吐氣 4 秒、憋氣 4 秒，幫助降低心跳並恢復思考。</p></article>
+          <article class="technique"><strong>👉 指差確認</strong><p>指向目標並大聲說出「出口在左邊！」，用語言與動作重新聚焦注意力。</p></article>
+          <article class="technique"><strong>💭 心智演練 What-If</strong><p>平時預想「如果出口受阻怎麼辦」，縮短真正災害發生時的驚訝期。</p></article>
+        </div>
+      </section>
+
+      <section class="edu-module" aria-labelledby="module-four-title">
+        <h3 class="module-title" id="module-four-title"><span class="module-no">04</span>學校災害管理四大階段與應變組織</h3>
+        <div class="cycle-grid" aria-label="學校災害管理四大階段">
+          <article class="cycle-card" style="--cycle-color:#fff4bd;"><strong>1. 減災</strong><small>Mitigation</small><p>耐震補強、樑柱不任意穿孔、固定重物防止跌落。</p></article>
+          <article class="cycle-card" style="--cycle-color:#e5f8f8;"><strong>2. 整備</strong><small>Preparedness</small><p>盤整維生管線、備妥急救物資、落實兵棋推演與情境演練。</p></article>
+          <article class="cycle-card" style="--cycle-color:#fff0e8;"><strong>3. 應變</strong><small>Response</small><p>啟動組織分工、蒐集與報告災情、落實疏散管制。</p></article>
+          <article class="cycle-card" style="--cycle-color:#f3efff;"><strong>4. 復原</strong><small>Recovery</small><p>心靈安撫、維護受教權、硬體復舊與災後檢討。</p></article>
+        </div>
+        <div class="org-brief">
+          <h4>校園應變組織：指揮清楚、分工明確</h4>
+          <ul>
+            <li><strong>指揮官：</strong>整體指揮、督導與協調。</li>
+            <li><strong>發言人：</strong>統一對外發言與主管機關通報。</li>
+            <li><strong>通報組：</strong>蒐集災情、聯繫家長與外部救援。</li>
+            <li><strong>避難引導組：</strong>疏散、點名及維護集結點安全。</li>
+            <li><strong>搶救組：</strong>初期滅火、關閉能源及排除障礙。</li>
+            <li><strong>緊急救護組：</strong>醫護站、檢傷、急救與心理安撫。</li>
+            <li><strong>安全防護組：</strong>安全巡查、警示與收容物資管理。</li>
+          </ul>
+          <a class="mission-jump" href="#mission-handbook-title">查看下方完整分組任務與記憶口訣 ↓</a>
+        </div>
+      </section>
+    </section>
 
     <section class="mission-handbook" aria-labelledby="mission-handbook-title">
       <header class="mission-heading">

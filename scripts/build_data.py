@@ -59,6 +59,26 @@ def normalize_role(value: object) -> str:
     return role
 
 
+def keep_first_assignment_per_person(
+    records: list[dict[str, str]],
+) -> list[dict[str, str]]:
+    """Keep one assignment per person, preserving source and row priority.
+
+    Main-sheet rows are read before annex rows, so an explicit main-sheet
+    assignment takes precedence over a generic annex assignment. If a person
+    appears more than once in the same source sequence, the first row wins.
+    """
+    output: list[dict[str, str]] = []
+    seen_names: set[str] = set()
+    for record in records:
+        name = record["name"]
+        if name in seen_names:
+            continue
+        seen_names.add(name)
+        output.append(record)
+    return output
+
+
 def read_records(path: Path) -> list[dict[str, str]]:
     workbook = openpyxl.load_workbook(path, data_only=True, read_only=True)
     records: list[dict[str, str]] = []
@@ -112,7 +132,7 @@ def read_records(path: Path) -> list[dict[str, str]]:
         if key not in existing_keys:
             records.append(record.copy())
 
-    return records
+    return keep_first_assignment_per_person(records)
 
 
 def main() -> None:

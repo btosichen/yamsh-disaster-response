@@ -226,15 +226,6 @@ window.STAFF_DATA = [
     "source": "應變小組主表"
   },
   {
-    "name": "林恩昕",
-    "title": "教務管理員",
-    "group": "通報組",
-    "fireGroup": "通報班",
-    "role": "組員",
-    "detail": "協助通報及災害資訊蒐集與回報",
-    "source": "應變小組主表"
-  },
-  {
     "name": "吳相瑩",
     "title": "總務約僱幹事",
     "group": "通報組",
@@ -379,35 +370,8 @@ window.STAFF_DATA = [
     "source": "應變小組主表"
   },
   {
-    "name": "鄭世甲",
-    "title": "技工",
-    "group": "安全防護組",
-    "fireGroup": "安全防護班",
-    "role": "組員",
-    "detail": "協助校園安全防護與物資發放作業",
-    "source": "應變小組主表"
-  },
-  {
     "name": "黃月英",
     "title": "會計約僱佐理員",
-    "group": "安全防護組",
-    "fireGroup": "安全防護班",
-    "role": "組員",
-    "detail": "協助校園安全防護與物資發放作業",
-    "source": "應變小組主表"
-  },
-  {
-    "name": "黃怡惠",
-    "title": "學務創新人力",
-    "group": "安全防護組",
-    "fireGroup": "安全防護班",
-    "role": "組員",
-    "detail": "協助校園安全防護與物資發放作業",
-    "source": "應變小組主表"
-  },
-  {
-    "name": "林愛玲",
-    "title": "工友",
     "group": "安全防護組",
     "fireGroup": "安全防護班",
     "role": "組員",
@@ -453,24 +417,6 @@ window.STAFF_DATA = [
   {
     "name": "李研懷",
     "title": "生物代理教師",
-    "group": "安全防護組",
-    "fireGroup": "安全防護班",
-    "role": "組員",
-    "detail": "協助校園安全防護與物資發放作業",
-    "source": "應變小組主表"
-  },
-  {
-    "name": "張家瑋",
-    "title": "圖書約僱幹事",
-    "group": "安全防護組",
-    "fireGroup": "安全防護班",
-    "role": "組員",
-    "detail": "協助校園安全防護與物資發放作業",
-    "source": "應變小組主表"
-  },
-  {
-    "name": "李子蘊",
-    "title": "圖書幹事",
     "group": "安全防護組",
     "fireGroup": "安全防護班",
     "role": "組員",
@@ -529,15 +475,6 @@ window.STAFF_DATA = [
     "fireGroup": "救護班",
     "role": "組員",
     "detail": "協助傷患救護與特教生照護",
-    "source": "應變小組主表"
-  },
-  {
-    "name": "邱卉綺",
-    "title": "註冊組長",
-    "group": "緊急救護組",
-    "fireGroup": "救護班",
-    "role": "組員",
-    "detail": "協助傷患救護與資料登記",
     "source": "應變小組主表"
   },
   {
@@ -793,15 +730,6 @@ window.STAFF_DATA = [
     "source": "附表一_高中專任"
   },
   {
-    "name": "呂政憲",
-    "title": "輔導教師",
-    "group": "搶救組",
-    "fireGroup": "滅火班",
-    "role": "組員",
-    "detail": "同搶救組負責工作（詳見首列說明）",
-    "source": "附表一_高中專任"
-  },
-  {
     "name": "黃怡衡",
     "title": "健護教師",
     "group": "搶救組",
@@ -921,15 +849,6 @@ window.STAFF_DATA = [
   {
     "name": "林愷晙",
     "title": "國文進修教師",
-    "group": "搶救組",
-    "fireGroup": "滅火班",
-    "role": "組員",
-    "detail": "同搶救組負責工作（詳見首列說明）",
-    "source": "附表一_高中專任"
-  },
-  {
-    "name": "宋欣祐",
-    "title": "輔導教師",
     "group": "搶救組",
     "fireGroup": "滅火班",
     "role": "組員",
@@ -1513,15 +1432,6 @@ window.STAFF_DATA = [
     "source": "附表二_國高中導師"
   },
   {
-    "name": "白驊中",
-    "title": "特教教師",
-    "group": "安全防護組",
-    "fireGroup": "安全防護班",
-    "role": "組員",
-    "detail": "建築物及設施安全檢查。\n教職員工生需要臨時收容時，協助發放生活物資、糧食及飲用水；以及各項救災物資登記、造冊、保管及分配。\n協助設置警示標誌及交通管制。\n協助毀損建築物與設施之警示標誌。\n校區硬體復舊及安全維護。\n維護臨時收容空間安全。\n確認停班、停課後，確實疏散校園內人員。\n防救災設施操作。\n註：如果教師於任課期間發生災害，請隨班進行疏散。",
-    "source": "附表三_國中專任"
-  },
-  {
     "name": "陳簾筑",
     "title": "國文教師",
     "group": "安全防護組",
@@ -1639,15 +1549,6 @@ window.STAFF_DATA = [
     "source": "附表三_國中專任"
   },
   {
-    "name": "柳嘉玲",
-    "title": "特教教師",
-    "group": "安全防護組",
-    "fireGroup": "安全防護班",
-    "role": "組員",
-    "detail": "同安全防護組負責工作（詳見首列說明）",
-    "source": "附表三_國中專任"
-  },
-  {
     "name": "林平平",
     "title": "英文教師",
     "group": "安全防護組",
@@ -1659,15 +1560,6 @@ window.STAFF_DATA = [
   {
     "name": "秦旭琨",
     "title": "國文教師",
-    "group": "安全防護組",
-    "fireGroup": "安全防護班",
-    "role": "組員",
-    "detail": "同安全防護組負責工作（詳見首列說明）",
-    "source": "附表三_國中專任"
-  },
-  {
-    "name": "任以容",
-    "title": "輔導教師",
     "group": "安全防護組",
     "fireGroup": "安全防護班",
     "role": "組員",
@@ -1695,33 +1587,6 @@ window.STAFF_DATA = [
   {
     "name": "邱春英",
     "title": "社會教師",
-    "group": "安全防護組",
-    "fireGroup": "安全防護班",
-    "role": "組員",
-    "detail": "同安全防護組負責工作（詳見首列說明）",
-    "source": "附表三_國中專任"
-  },
-  {
-    "name": "張又心",
-    "title": "專輔教師",
-    "group": "安全防護組",
-    "fireGroup": "安全防護班",
-    "role": "組員",
-    "detail": "同安全防護組負責工作（詳見首列說明）",
-    "source": "附表三_國中專任"
-  },
-  {
-    "name": "蕭雅心",
-    "title": "專輔教師",
-    "group": "安全防護組",
-    "fireGroup": "安全防護班",
-    "role": "組員",
-    "detail": "同安全防護組負責工作（詳見首列說明）",
-    "source": "附表三_國中專任"
-  },
-  {
-    "name": "李研懷",
-    "title": "生物教師",
     "group": "安全防護組",
     "fireGroup": "安全防護班",
     "role": "組員",

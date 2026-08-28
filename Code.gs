@@ -44,6 +44,13 @@ function annexRole_(value) {
   return assignment;
 }
 
+function pushFirstAssignment_(results, record) {
+  const duplicateName = results.some(function (item) {
+    return item.name === record.name;
+  });
+  if (!duplicateName) results.push(record);
+}
+
 function searchTeacherTask(searchName) {
   const query = clean_(searchName, '').replace(/\s+/g, '');
   if (query.length < 2) return [];
@@ -62,7 +69,7 @@ function searchTeacherTask(searchName) {
     const name = clean_(row[4], '');
     if (!name || CONFIG.placeholders.indexOf(name) !== -1) continue;
     if (name.replace(/\s+/g, '').indexOf(query) === -1) continue;
-    results.push({
+    pushFirstAssignment_(results, {
       group: clean_(row[1]),
       fireGroup: clean_(row[2]),
       role: clean_(row[3]),
@@ -81,7 +88,7 @@ function searchTeacherTask(searchName) {
       const row = data[i];
       const name = clean_(row[config.nameIndex], '');
       if (!name || name.replace(/\s+/g, '').indexOf(query) === -1) continue;
-      results.push({
+      pushFirstAssignment_(results, {
         group: config.group,
         fireGroup: config.fireGroup,
         role: annexRole_(row[3]),
@@ -95,11 +102,7 @@ function searchTeacherTask(searchName) {
 
   CONFIG.extraRecords.forEach(function (record) {
     if (record.name.replace(/\s+/g, '').indexOf(query) === -1) return;
-    const duplicate = results.some(function (item) {
-      return item.name === record.name && item.group === record.group &&
-        item.fireGroup === record.fireGroup && item.role === record.role;
-    });
-    if (!duplicate) results.push(record);
+    pushFirstAssignment_(results, record);
   });
 
   return results;

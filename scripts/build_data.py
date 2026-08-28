@@ -15,9 +15,15 @@ import openpyxl
 
 MAIN_SHEET = "應變小組主表"
 ANNEXES = {
-    "附表一_高中專任": ("搶救組", "滅火班"),
-    "附表二_國高中導師": ("避難引導組", "避難引導班"),
-    "附表三_國中專任": ("安全防護組", "安全防護班"),
+    "附表一_高中專任": {
+        "group": "搶救組", "fire_group": "滅火班", "name_index": 1, "title_index": 2
+    },
+    "附表二_國高中導師": {
+        "group": "避難引導組", "fire_group": "避難引導班", "name_index": 2, "title_index": 1
+    },
+    "附表三_國中專任": {
+        "group": "安全防護組", "fire_group": "安全防護班", "name_index": 1, "title_index": 2
+    },
 }
 PLACEHOLDER_NAMES = {"高中專任（含外師）", "國高中導師", "國中專任"}
 MANUAL_RECORDS = [
@@ -75,10 +81,13 @@ def read_records(path: Path) -> list[dict[str, str]]:
             }
         )
 
-    for sheet_name, (group, fire_group) in ANNEXES.items():
+    for sheet_name, config in ANNEXES.items():
         sheet = workbook[sheet_name]
         for row in sheet.iter_rows(min_row=4, max_col=5, values_only=True):
-            _, name, title, assignment, detail = row
+            name = row[config["name_index"]]
+            title = row[config["title_index"]]
+            assignment = row[3]
+            detail = row[4]
             name = text(name, "")
             if not name:
                 continue
@@ -86,8 +95,8 @@ def read_records(path: Path) -> list[dict[str, str]]:
                 {
                     "name": name,
                     "title": text(title),
-                    "group": group,
-                    "fireGroup": fire_group,
+                    "group": config["group"],
+                    "fireGroup": config["fire_group"],
                     "role": normalize_role(assignment),
                     "detail": text(detail),
                     "source": sheet_name,

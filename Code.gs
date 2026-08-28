@@ -1,9 +1,9 @@
 const CONFIG = {
   mainSheet: '應變小組主表',
   annexes: [
-    { sheet: '附表一_高中專任', group: '搶救組', fireGroup: '滅火班' },
-    { sheet: '附表二_國高中導師', group: '避難引導組', fireGroup: '避難引導班' },
-    { sheet: '附表三_國中專任', group: '安全防護組', fireGroup: '安全防護班' }
+    { sheet: '附表一_高中專任', group: '搶救組', fireGroup: '滅火班', nameIndex: 1, titleIndex: 2 },
+    { sheet: '附表二_國高中導師', group: '避難引導組', fireGroup: '避難引導班', nameIndex: 2, titleIndex: 1 },
+    { sheet: '附表三_國中專任', group: '安全防護組', fireGroup: '安全防護班', nameIndex: 1, titleIndex: 2 }
   ],
   placeholders: ['高中專任（含外師）', '國高中導師', '國中專任'],
   extraRecords: [
@@ -79,14 +79,14 @@ function searchTeacherTask(searchName) {
     const data = sheet.getDataRange().getDisplayValues();
     for (let i = 3; i < data.length; i += 1) {
       const row = data[i];
-      const name = clean_(row[1], '');
+      const name = clean_(row[config.nameIndex], '');
       if (!name || name.replace(/\s+/g, '').indexOf(query) === -1) continue;
       results.push({
         group: config.group,
         fireGroup: config.fireGroup,
         role: annexRole_(row[3]),
         name: name,
-        title: clean_(row[2]),
+        title: clean_(row[config.titleIndex]),
         detail: clean_(row[4]),
         source: config.sheet
       });

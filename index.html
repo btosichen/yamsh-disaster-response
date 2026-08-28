@@ -124,16 +124,22 @@
     .mission-heading { margin-bottom: 20px; }
     .mission-heading .section-label { display: inline-block; padding: 5px 10px; color: white; background: var(--red); border: 2px solid var(--ink); border-radius: 999px; font-size: .75rem; font-weight: 950; letter-spacing: .04em; }
     .mission-heading h2 { margin: 10px 0 6px; font-size: clamp(1.45rem, 4vw, 2rem); }
+    .mission-heading .heading-en { display: block; margin-top: 3px; color: var(--muted); font-size: .58em; font-weight: 800; }
     .mission-heading p { margin: 0; color: var(--muted); line-height: 1.65; }
+    .mission-heading p[lang="en"] { margin-top: 3px; font-size: .86rem; }
     .system-note { margin: 16px 0 22px; padding: 12px 14px; background: #fff8dc; border: 2px solid var(--ink); border-radius: 12px; line-height: 1.6; }
     .system-note strong { color: #a53b17; }
+    .system-note p { margin: 3px 0 0; }
+    .system-note p[lang="en"] { color: var(--muted); font-size: .84rem; }
     .command-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
     .command-card { padding: 18px; background: #fffaf0; border: 2px solid var(--ink); border-radius: 15px; }
     .command-card.commander { color: white; background: linear-gradient(135deg, #d92f45, #a81931); border-width: 4px; box-shadow: 4px 4px 0 var(--ink); transform: translateY(-3px); }
     .command-card h3 { margin: 0; font-size: 1.18rem; }
     .command-card h3 small { display: block; margin-top: 3px; color: var(--muted); font-size: .78rem; }
+    .english-name { display: block; margin: 3px 0 0 38px; color: var(--muted); font-size: .74rem; font-weight: 800; }
     .command-card.commander h3 { font-size: 1.5rem; text-shadow: 2px 2px 0 #6f1020; }
     .command-card.commander h3 small { color: #fff5c9; }
+    .command-card.commander .english-name { color: #fff5c9; }
     .role-no { display: inline-grid; place-items: center; width: 30px; height: 30px; margin-right: 5px; color: var(--ink); background: var(--yellow); border: 2px solid var(--ink); border-radius: 50%; font-size: .75rem; text-shadow: none; }
     .memory-key { margin: 12px 0; padding: 9px 10px; color: var(--ink); background: var(--yellow); border: 2px solid var(--ink); border-radius: 10px; text-align: center; }
     .memory-key strong { display: block; font-size: .7rem; }
@@ -144,8 +150,11 @@
     .team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
     .team-card { overflow: hidden; padding: 17px; background: #fff; border: 2px solid var(--ink); border-top: 9px solid var(--team-color, var(--yellow)); border-radius: 14px; }
     .team-card h3 { margin: 0; font-size: 1.08rem; }
+    .team-card .english-name { margin-left: 0; }
     .team-card .leader { margin: 4px 0 10px; color: var(--muted); font-size: .82rem; font-weight: 750; }
     .team-card .team-memory { display: inline-block; margin-bottom: 11px; padding: 5px 9px; background: color-mix(in srgb, var(--team-color, var(--yellow)) 28%, white); border: 2px solid var(--ink); border-radius: 999px; font-size: .78rem; font-weight: 950; }
+    .mission-en { margin: 12px 0 0; padding-top: 10px; color: var(--muted); border-top: 1px dashed #aeb7c2; font-size: .82rem; line-height: 1.55; }
+    .command-card.commander .mission-en { color: #fff5dc; border-top-color: rgb(255 255 255 / .55); }
     .video-card { margin-top: 34px; padding: clamp(18px, 4vw, 26px); background: white; border: var(--line); box-shadow: var(--shadow); border-radius: 22px; }
     .video-card h2 { margin: 0 0 5px; font-size: 1.28rem; }
     .video-card p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
@@ -200,41 +209,49 @@
     <section class="mission-handbook" aria-labelledby="mission-handbook-title">
       <header class="mission-heading">
         <span class="section-label">🚨 防災任務速記 · PLAYBOOK</span>
-        <h2 id="mission-handbook-title">緊急應變小組分組與任務資訊</h2>
+        <h2 id="mission-handbook-title">緊急應變小組分組與任務資訊 <span class="heading-en" lang="en">Emergency Response Roles &amp; Duties</span></h2>
         <p>災害發生時，先確認自己的角色與組別，再依任務指引行動；醒目口訣可協助快速記住工作重點。</p>
+        <p lang="en">In an emergency, identify your role and team first, then follow the duty guide and memory cues.</p>
       </header>
 
       <div class="system-note">
         <strong>兩種編組怎麼看？</strong>
-        「緊急應變小組」是校級災害應變任務組別；「自衛消防編組」是對應的消防任務班別。同一人可能兼任多項任務，查詢結果中的每張卡片代表一項獨立任務。
+        <p>「緊急應變小組」是校級災害應變任務組別；「自衛消防編組」是對應的消防任務班別。同一人可能兼任多項任務，查詢結果中的每張卡片代表一項獨立任務。</p>
+        <p lang="en"><strong>Two team systems:</strong> The Emergency Response Team is the school-wide duty group; the Self-Defense Fire Team is the corresponding fire-safety unit. Each result card represents one assignment.</p>
       </div>
 
       <div class="command-grid" aria-label="指揮核心任務">
         <article class="command-card commander">
           <h3><span class="role-no">01</span>指揮官 <small>校長</small></h3>
+          <span class="english-name" lang="en">Commander · Principal</span>
           <div class="memory-key"><strong>記憶口訣</strong><span>指・督・協・援</span></div>
           <ul>
             <li>負責指揮、督導、協調全校應變。</li>
             <li>依情況調動各分組相互支援。</li>
           </ul>
+          <p class="mission-en" lang="en">Leads, supervises, and coordinates the school-wide response, assigning teams to support one another as needed.</p>
         </article>
 
         <article class="command-card">
           <h3><span class="role-no">02</span>指揮官代理人 <small>教務主任</small></h3>
+          <span class="english-name" lang="en">Deputy Commander · Director of Academic Affairs</span>
           <div class="memory-key"><strong>記憶口訣</strong><span>校長不在・代理指揮</span></div>
           <ul>
             <li>校長不在校或無法執行職務時代理指揮官。</li>
           </ul>
+          <p class="mission-en" lang="en">Takes command when the principal is absent or unable to perform the commander's duties.</p>
         </article>
 
         <article class="command-card">
           <h3><span class="role-no">03</span>發言人 <small>學務主任</small></h3>
+          <span class="english-name" lang="en">Spokesperson · Director of Student Affairs</span>
           <div class="memory-key"><strong>記憶口訣</strong><span>說・報・助</span></div>
           <ul>
             <li>統一對外發言與媒體應對。</li>
             <li>呈報上級主管機關相關通報事宜。</li>
             <li>襄助指揮官現場指揮協調。</li>
           </ul>
+          <p class="mission-en" lang="en">Serves as the single public voice, reports to supervising authorities, and assists on-site command.</p>
         </article>
       </div>
 
@@ -242,6 +259,7 @@
       <div class="team-grid">
         <article class="team-card" style="--team-color: #ff7338;">
           <h3>🧯 搶救組／滅火班</h3>
+          <span class="english-name" lang="en">Rescue Team / Fire Suppression Unit</span>
           <p class="leader">組長：總務主任</p>
           <span class="team-memory">口訣：備・救・關・警・滅・援</span>
           <ul>
@@ -252,10 +270,12 @@
             <li>若發生火災，研判火勢並使用滅火器／消防栓進行初期滅火。</li>
             <li>支援避難引導組及搬運防災器材。</li>
           </ul>
+          <p class="mission-en" lang="en">Maintains rescue equipment and handles rescue, utility shutdown, hazard control, initial firefighting, and team support.</p>
         </article>
 
         <article class="team-card" style="--team-color: #55c8ee;">
           <h3>📣 通報組／通報班</h3>
+          <span class="english-name" lang="en">Notification Team / Communication Unit</span>
           <p class="leader">組長：研發處主任</p>
           <span class="team-memory">口訣：報・聯・蒐・記</span>
           <ul>
@@ -264,10 +284,12 @@
             <li>蒐集、評估、傳播災害資訊，記錄指揮官所有下達指令。</li>
             <li>啟動社區志工、家長協助與學生家長緊急聯繫。</li>
           </ul>
+          <p class="mission-en" lang="en">Requests outside assistance, reports the situation, records commands, and coordinates family and community contacts.</p>
         </article>
 
         <article class="team-card" style="--team-color: #77d77c;">
           <h3>➜ 避難引導組／避難引導班</h3>
+          <span class="english-name" lang="en">Evacuation Guidance Team / Evacuation Unit</span>
           <p class="leader">組長：圖書館主任</p>
           <span class="team-memory">口訣：疏・點・安・報・領</span>
           <ul>
@@ -276,10 +298,12 @@
             <li>視災情引導移動與安置，回報安全狀況或申請救護車支援。</li>
             <li>設置集結點服務臺，處理學生領回作業與諮詢。</li>
           </ul>
+          <p class="mission-en" lang="en">Guides evacuation, confirms headcounts, maintains assembly-area safety, and supports relocation and student reunification.</p>
         </article>
 
         <article class="team-card" style="--team-color: #c48ae6;">
           <h3>🛡 安全防護組／安全防護班</h3>
+          <span class="english-name" lang="en">Safety Protection Team / Safety Unit</span>
           <p class="leader">組長：人事主任</p>
           <span class="team-memory">口訣：查・標・物・收・散</span>
           <ul>
@@ -288,10 +312,12 @@
             <li>維護臨時收容空間安全。</li>
             <li>確認停班停課後確實疏散校園內人員。</li>
           </ul>
+          <p class="mission-en" lang="en">Inspects facilities, marks hazards, manages relief supplies and shelters, and confirms campus evacuation.</p>
         </article>
 
         <article class="team-card" style="--team-color: #ff78a5;">
           <h3>✚ 緊急救護組／救護班</h3>
+          <span class="english-name" lang="en">Emergency Medical Team / First-Aid Unit</span>
           <p class="leader">組長：秘書、輔導主任</p>
           <span class="team-memory">口訣：站・檢・救・送・安・登</span>
           <ul>
@@ -300,6 +326,7 @@
             <li>情緒支持、安撫與心理輔導。</li>
             <li>登記傷患姓名、班級並建立傷患名冊。</li>
           </ul>
+          <p class="mission-en" lang="en">Sets up first-aid stations, provides triage and emergency care, and supports transport, counseling, and casualty records.</p>
         </article>
       </div>
     </section>

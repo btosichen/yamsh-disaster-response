@@ -110,6 +110,10 @@
     .fact { min-width: 0; padding: 12px; background: #fff8dc; border: 2px solid var(--ink); border-radius: 12px; }
     .fact span { display: block; color: #a53b17; font-size: .77rem; font-weight: 900; }
     .fact strong { display: block; margin-top: 3px; overflow-wrap: anywhere; }
+    .group-mission { margin-top: 13px; padding: 13px 15px; background: #f3efff; border: 2px solid var(--ink); border-radius: 12px; }
+    .group-mission h3 { margin: 0 0 6px; color: #573b82; font-size: 1rem; }
+    .group-mission p { margin: 3px 0; line-height: 1.5; }
+    .group-mission p[lang="en"] { color: #5e6875; font-size: .88rem; }
     .task { margin-top: 13px; padding: 15px; background: #e5f8f8; border: 2px solid var(--ink); border-radius: 12px; }
     .task h3 { margin: 0 0 8px; color: #075d60; font-size: 1rem; }
     .task ul { margin: 0; padding-left: 1.25rem; }
@@ -202,6 +206,14 @@
       const results = document.querySelector('#results');
       const colors = { 指揮部: '#ffd84d', 搶救組: '#ff7338', 通報組: '#55c8ee', 避難引導組: '#77d77c', 安全防護組: '#c48ae6', 緊急救護組: '#ff78a5' };
       const icons = { 指揮部: '★', 搶救組: '🧯', 通報組: '📣', 避難引導組: '➜', 安全防護組: '🛡', 緊急救護組: '✚' };
+      const groupMissions = {
+        指揮部: { zh: '統籌緊急應變指揮、協調各組並統一發布資訊。', en: 'Direct the emergency response, coordinate all teams, and manage official information.' },
+        搶救組: { zh: '執行人員搜救、初期滅火及現場危險排除。', en: 'Conduct rescue, initial firefighting, and on-site hazard control.' },
+        通報組: { zh: '負責災情通報、資訊蒐集及外部支援聯繫。', en: 'Report incidents, collect information, and contact external support.' },
+        避難引導組: { zh: '引導人員疏散、清點人數並維持集合地點秩序。', en: 'Guide evacuation, conduct headcounts, and maintain order at assembly areas.' },
+        安全防護組: { zh: '檢查設施安全、管制危險區域並支援物資管理。', en: 'Inspect facilities, control hazardous areas, and support supply management.' },
+        緊急救護組: { zh: '設置急救站、進行檢傷急救並協助就醫與心理支持。', en: 'Set up first-aid stations, provide triage and care, and support transport and well-being.' }
+      };
 
       const el = (tag, className, text) => {
         const node = document.createElement(tag);
@@ -228,12 +240,20 @@
         const body = el('div', 'card-body');
         const facts = el('div', 'facts');
         facts.append(fact('緊急應變小組', item.group), fact('自衛消防編組', item.fireGroup), fact('編組職務', item.role));
+        const missionText = groupMissions[item.group] || { zh: '依學校緊急應變計畫執行分組任務。', en: 'Carry out assigned duties under the school emergency response plan.' };
+        const mission = el('div', 'group-mission');
+        mission.append(el('h3', '', '小組任務簡介｜Group Mission'));
+        const missionZh = el('p', '', missionText.zh);
+        missionZh.lang = 'zh-Hant-TW';
+        const missionEn = el('p', '', missionText.en);
+        missionEn.lang = 'en';
+        mission.append(missionZh, missionEn);
         const task = el('div', 'task');
-        task.append(el('h3', '', '負責工作與緊急防救災任務'));
+        task.append(el('h3', '', '負責工作與緊急防救災任務｜Assigned Duties'));
         const list = el('ul');
         String(item.detail || '-').split(/\r?\n/).filter(Boolean).forEach(line => list.append(el('li', '', line)));
         task.append(list);
-        body.append(facts, task, el('div', 'source', `名冊來源：${item.source}`));
+        body.append(facts, mission, task, el('div', 'source', `名冊來源：${item.source}`));
         article.append(top, body);
         return article;
       }

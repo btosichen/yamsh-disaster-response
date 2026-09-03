@@ -48,6 +48,12 @@
     .team { padding:15px; background:#eefaff; border:var(--line); border-radius:16px; }
     .team h3 { margin:0 0 8px; font-size:1rem; }
     .team p { color:#344054; font-size:.92rem; }
+    .team.command-team { grid-column:1 / -1; padding:18px; background:linear-gradient(135deg,#fff7c9,#ffe3ec); }
+    .leadership-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+    .leader { padding:13px; background:white; border:1.5px solid var(--ink); border-radius:12px; }
+    .leader span { display:block; color:#8f3548; font-size:.88rem; font-weight:900; }
+    .leader strong { display:inline-block; margin:5px 7px 0 0; font-size:1.18rem; }
+    .leader em { color:#445064; font-style:normal; font-weight:750; }
     .toolbar { position:sticky; top:62px; z-index:15; display:grid; grid-template-columns:minmax(180px,1fr) minmax(180px,.6fr) auto; gap:10px; padding:12px; background:#fff5c8; border:var(--line); border-radius:17px; box-shadow:4px 4px 0 var(--ink); }
     .toolbar input, .toolbar select { width:100%; min-height:46px; padding:10px 12px; background:white; border:var(--line); border-radius:12px; }
     .toolbar button { min-height:46px; padding:8px 13px; background:var(--ink); color:white; border:var(--line); border-radius:12px; font-weight:900; }
@@ -85,6 +91,7 @@
       .hero { grid-template-columns:1fr; text-align:center; }
       .mascot { margin:auto; }
       .quick-nav, .team-grid { grid-template-columns:repeat(2,1fr); }
+      .leadership-list { grid-template-columns:1fr; }
       .toolbar { top:58px; grid-template-columns:1fr; }
       .actions, .settings { grid-template-columns:1fr; }
       .step summary { grid-template-columns:auto 1fr; }
@@ -185,7 +192,12 @@
       const settingsGrid = document.getElementById('settings-grid');
       data.settings.forEach(item => { const card = el('article','setting'); card.append(el('h3','',item.label),el('p','preserve',item.text)); settingsGrid.append(card); });
       const teamGrid = document.getElementById('team-grid');
-      data.teams.forEach(item => { const card=el('article','team'); card.append(el('h3','',item.role),el('p','preserve',item.members)); teamGrid.append(card); });
+      data.teams.forEach(item => {
+        const isCommand=item.role.includes('指揮官'); const card=el('article',`team${isCommand?' command-team':''}`); card.append(el('h3','',item.role));
+        if(isCommand){ const leaders=el('div','leadership-list'); data.leadership.forEach(person=>{ const leader=el('div','leader'); leader.append(el('span','',person.role),el('strong','',person.name),el('em','',person.title)); leaders.append(leader); }); card.append(leaders); }
+        else card.append(el('p','preserve',item.members));
+        teamGrid.append(card);
+      });
 
       const roleFilter = document.getElementById('role-filter');
       const roles = ['全部角色', ...new Set(data.timeline.flatMap(step => (step.actions || []).map(action => action.role)))];

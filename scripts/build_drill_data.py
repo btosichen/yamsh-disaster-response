@@ -11,6 +11,11 @@ from docx import Document
 
 
 ROLE_LABELS = ["指揮官／發言人", "通報組", "避難引導組", "搶救組", "安全防護組", "緊急救護組", "老師", "學生"]
+LEADERSHIP = [
+    {"role": "指揮官", "name": "洪金英", "title": "校長"},
+    {"role": "指揮官代理人", "name": "陳佑昌", "title": "教務主任"},
+    {"role": "發言人", "name": "簡世煜", "title": "學務主任"},
+]
 SCENARIO_OVERRIDE = "115年09月21日9時21分（第二節上課）時段，臺北市發生震度（4級）地震，地震持續　30　秒（造成：▓電力及□通訊中斷，▓產生 求真樓設備組失火複合性災害），震動停止後，學校進行避難疏散。"
 # Use a representative column near the centre of each merged role header.  Matrix
 # body cells sometimes cross a header boundary, so using the left edge can pick
@@ -134,6 +139,7 @@ def build(source: Path) -> dict[str, object]:
         "settings": settings,
         "scenarioLabel": at(table.rows[8], 0),
         "scenario": SCENARIO_OVERRIDE,
+        "leadership": LEADERSHIP,
         "matrixHeaders": list(
             dict.fromkeys(
                 at(row, index)

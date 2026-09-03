@@ -91,6 +91,8 @@ def build(source: Path) -> dict[str, object]:
     for start in team_starts:
         role = at(team_header, start)
         members = at(team_values, start)
+        if role == "通報組" and "丁肆山" not in members:
+            members = f"{members}\n名冊更新：新增丁肆山（保全），通報組共10名組員"
         teams.append({"role": role, "members": "" if members == role else members})
 
     timeline = [

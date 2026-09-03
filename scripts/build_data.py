@@ -1,16 +1,18 @@
-"""Generate the static web app data file from the official workbook.
+"""Generate the static web app data file from the official roster.
 
 Usage:
-  python scripts/build_data.py path/to/workbook.xlsx
+  python scripts/build_data.py path/to/roster.docx
 """
 
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
 import openpyxl
+from docx import Document
 
 
 MAIN_SHEET = "應變小組主表"
@@ -26,23 +28,11 @@ ANNEXES = {
     },
 }
 PLACEHOLDER_NAMES = {"高中專任（含外師）", "國高中導師", "國中專任"}
-MANUAL_RECORDS = [
-    {
-        "name": "張安莛",
-        "title": "秘書",
-        "group": "緊急救護組",
-        "fireGroup": "救護班",
-        "role": "組長",
-        "detail": (
-            "設立急救站。\n"
-            "針對傷患進行檢傷分類。\n"
-            "緊急基本急救、重傷患就醫護送。\n"
-            "情緒支持、安撫及心理輔導。\n"
-            "登記傷患姓名、班級，建立傷患名冊。"
-        ),
-        "source": "補充資料",
-    }
-]
+DOCX_ANNEXES = {
+    2: {"group": "搶救組", "fire_group": "滅火班", "source": "附表一_高中專任"},
+    3: {"group": "避難引導組", "fire_group": "避難引導班", "source": "附表二_國高中導師"},
+    4: {"group": "安全防護組", "fire_group": "安全防護班", "source": "附表三_國中專任"},
+}
 
 
 def text(value: object, fallback: str = "-") -> str:
@@ -79,7 +69,7 @@ def keep_first_assignment_per_person(
     return output
 
 
-def read_records(path: Path) -> list[dict[str, str]]:
+def read_xlsx_records(path: Path) -> list[dict[str, str]]:
     workbook = openpyxl.load_workbook(path, data_only=True, read_only=True)
     records: list[dict[str, str]] = []
 
@@ -123,21 +113,83 @@ def read_records(path: Path) -> list[dict[str, str]]:
                 }
             )
 
-    existing_keys = {
-        (record["name"], record["group"], record["fireGroup"], record["role"])
-        for record in records
-    }
-    for record in MANUAL_RECORDS:
-        key = (record["name"], record["group"], record["fireGroup"], record["role"])
-        if key not in existing_keys:
-            records.append(record.copy())
+    return keep_first_assignment_per_person(records)
+
+
+def compact(value: object) -> str:
+    return re.sub(r"\s+", "", str(value or ""))
+
+
+def cell_items(cell) -> list[str]:
+    return [re.sub(r"\s+", " ", paragraph.text).strip() for paragraph in cell.paragraphs if paragraph.text.strip()]
+
+
+def parse_docx_group(value: str) -> tuple[str, str]:
+    value = compact(value)
+    if value in {"指揮官", "指揮官代理人", "發言人"}:
+        return "指揮部", "-"
+    match = re.fullmatch(r"(.+?)（(.+?)）", value)
+    return (match.group(1), match.group(2)) if match else (value, "-")
+
+
+def read_docx_records(path: Path) -> list[dict[str, str]]:
+    """Read the latest Word roster, keeping its first assignment per person."""
+    document = Document(path)
+    records: list[dict[str, str]] = []
+    group_details: dict[str, str] = {}
+
+    for table_index, table in enumerate(document.tables, 1):
+        for row_index, row in enumerate(table.rows, 1):
+            if row_index == 1 or len(row.cells) < 5:
+                continue
+            names = cell_items(row.cells[2])
+            titles = cell_items(row.cells[3])
+            if len(names) == 1 and len(titles) > 1:
+                titles = ["".join(titles)]
+            if len(names) != len(titles):
+                raise ValueError(f"姓名與職稱未對齊：表 {table_index}、列 {row_index}")
+
+            if table_index in DOCX_ANNEXES:
+                annex = DOCX_ANNEXES[table_index]
+                group, fire_group, source = annex["group"], annex["fire_group"], annex["source"]
+                detail = group_details[group]
+            else:
+                group, fire_group = parse_docx_group(row.cells[0].text)
+                source = MAIN_SHEET
+                detail = "\n".join(p.text.strip() for p in row.cells[4].paragraphs if p.text.strip())
+                if group != "指揮部":
+                    group_details[group] = detail
+
+            role = compact(row.cells[1].text)
+            for name, title in zip(names, titles):
+                if name.startswith("*"):
+                    continue
+                records.append(
+                    {
+                        "name": name,
+                        "title": title,
+                        "group": group,
+                        "fireGroup": fire_group,
+                        "role": role,
+                        "detail": detail,
+                        "source": source,
+                    }
+                )
 
     return keep_first_assignment_per_person(records)
 
 
+def read_records(path: Path) -> list[dict[str, str]]:
+    if path.suffix.lower() == ".docx":
+        return read_docx_records(path)
+    if path.suffix.lower() == ".xlsx":
+        return read_xlsx_records(path)
+    raise ValueError("僅支援 .docx 或 .xlsx 名冊。")
+
+
 def main() -> None:
     if len(sys.argv) != 2:
-        raise SystemExit("請提供 Excel 檔案路徑。")
+        raise SystemExit("請提供 Word 或 Excel 名冊路徑。")
 
     source = Path(sys.argv[1]).resolve()
     if not source.exists():
@@ -148,7 +200,7 @@ def main() -> None:
     output = Path(__file__).resolve().parents[1] / "staff-data.js"
     payload = json.dumps(records, ensure_ascii=False, indent=2)
     output.write_text(
-        "// 由 scripts/build_data.py 從正式 Excel 名冊產生，請勿手動編輯。\n"
+        f"// 由 scripts/build_data.py 從正式名冊 {source.name} 產生，請勿手動編輯。\n"
         f"window.STAFF_DATA = {payload};\n",
         encoding="utf-8",
     )

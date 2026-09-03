@@ -5,7 +5,7 @@
 - GitHub Pages 靜態網站：`index.html` + `staff-data.js`
 - Google 試算表側邊欄：`Code.gs` + `Sidebar.html`
 
-目前資料由「北市立陽明高級中學115學年度緊急應變小組分組表.xlsx」及補充資料產生，共 178 筆任務指派、178 位不重複姓名；每人僅保留一項主要任務。主表明列任務優先於附表通用任務，同一來源中依名冊順序保留第一筆。
+目前資料以「115學年度緊急應變小組_1150821_職稱修正版_人員不重複版.docx」為準，共 177 筆任務指派、177 位不重複姓名；每人僅保留一項主要任務。
 
 ## GitHub Pages
 
@@ -24,10 +24,10 @@ python -m http.server 8000
 
 ## 更新靜態網站名冊
 
-Excel 分頁名稱與欄位保持不變時，執行：
+更新 Word 分組表後，執行：
 
 ```powershell
-python scripts/build_data.py "北市立陽明高級中學115學年度緊急應變小組分組表.xlsx"
+python scripts/build_data.py "115學年度緊急應變小組_1150821_職稱修正版_人員不重複版.docx"
 ```
 
 接著重新提交產生的 `staff-data.js`。

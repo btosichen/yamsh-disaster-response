@@ -3,6 +3,7 @@
 本專案包含兩種部署方式：
 
 - GitHub Pages 靜態網站：`index.html` + `staff-data.js`
+- 防災演練互動腳本：`drill-script.html` + `drill-data.js`
 - Google 試算表側邊欄：`Code.gs` + `Sidebar.html`
 
 目前資料以「115學年度緊急應變小組_1150821_職稱修正版_人員不重複版.docx」為準，共 177 筆任務指派、177 位不重複姓名；每人僅保留一項主要任務。
@@ -10,7 +11,7 @@
 ## GitHub Pages
 
 1. 建立新的 GitHub Repository（若含真實教職員名冊，請先依校方個資政策決定使用公開或私有存放庫）。
-2. 將 `index.html` 與 `staff-data.js` 放在 Repository 根目錄。
+2. 將 `index.html`、`staff-data.js`、`drill-script.html` 與 `drill-data.js` 放在 Repository 根目錄。
 3. 到 **Settings → Pages**，選擇由 `main` 分支根目錄部署。
 4. 等待 GitHub Pages 完成發布。
 
@@ -31,6 +32,16 @@ python scripts/build_data.py "115學年度緊急應變小組_1150821_職稱修�
 ```
 
 接著重新提交產生的 `staff-data.js`。
+
+## 更新防災演練互動腳本
+
+更新矩陣式腳本 Word 檔後，執行：
+
+```powershell
+python scripts/build_drill_data.py "115臺北市防災教育輔導團防災演練矩陣式腳本設計指引_陽明高中.docx"
+```
+
+接著重新提交產生的 `drill-data.js`。
 
 ## Google Apps Script
 

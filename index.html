@@ -70,6 +70,12 @@
     .quick-guide strong { display: block; margin-bottom: 3px; color: var(--ink); }
     .quick-guide p { margin: 2px 0; }
     .quick-guide p[lang="en"] { color: #5e6875; }
+    .drill-launch { display: grid; grid-template-columns: 92px 1fr auto; align-items: center; gap: 16px; margin-top: 20px; padding: 15px 18px; color: var(--ink); background: linear-gradient(135deg, #fff 0 68%, #bcefff 68%); border: var(--line); border-radius: 20px; box-shadow: var(--shadow); text-decoration: none; transition: transform .15s, box-shadow .15s; }
+    .drill-launch:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--ink); }
+    .drill-launch svg { width: 86px; filter: drop-shadow(3px 4px 0 var(--ink)); }
+    .drill-launch strong { display: block; color: #9d263a; font-size: clamp(1.1rem, 3vw, 1.45rem); }
+    .drill-launch span { display: block; margin-top: 4px; color: var(--muted); font-size: .88rem; font-weight: 750; line-height: 1.5; }
+    .drill-launch .go { display: grid; place-items: center; width: 42px; height: 42px; color: white; background: var(--red); border: 2px solid var(--ink); border-radius: 50%; font-size: 1.35rem; font-weight: 950; }
     .panel { margin-top: 26px; padding: clamp(20px, 4vw, 30px); background: white; }
     .panel label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 1.08rem; }
     .search-row { display: flex; gap: 12px; }
@@ -226,6 +232,9 @@
       .cycle-grid { grid-template-columns: repeat(2, 1fr); }
       .command-grid, .team-grid { grid-template-columns: 1fr; }
       .command-card.commander { transform: none; }
+      .drill-launch { grid-template-columns: 70px 1fr; }
+      .drill-launch svg { width: 65px; }
+      .drill-launch .go { display: none; }
     }
     @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; animation: none !important; } }
   </style>
@@ -243,6 +252,19 @@
       <p lang="zh-Hant-TW">本系統協助教職員快速查詢緊急應變編組與負責任務，請輸入完整中文姓名。</p>
       <p lang="en">This system helps staff check their emergency response assignment and duties. Enter the staff member's full Chinese name.</p>
     </section>
+
+    <a class="drill-launch" href="drill-script.html" aria-label="開啟防災演練互動腳本">
+      <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+        <path d="M60 6 106 24v33c0 29-18 47-46 57C32 104 14 86 14 57V24Z" fill="#55d8e6" stroke="#18212f" stroke-width="5"/>
+        <path d="M28 43c3-22 16-29 32-29s29 7 32 29Z" fill="#ffd84d" stroke="#18212f" stroke-width="5"/>
+        <rect x="56" y="17" width="8" height="22" rx="2" fill="#d92f45"/><rect x="48" y="24" width="24" height="8" rx="2" fill="#d92f45"/>
+        <circle cx="44" cy="63" r="4" fill="#18212f"/><circle cx="76" cy="63" r="4" fill="#18212f"/>
+        <path d="M45 78c9 8 21 8 30 0" fill="none" stroke="#18212f" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="32" cy="74" r="6" fill="#ff8caf"/><circle cx="88" cy="74" r="6" fill="#ff8caf"/>
+      </svg>
+      <span><strong>🎬 防災演練互動腳本</strong><span>依時間與角色查看行動、逐步勾選演練進度，一看就知道現在該做什麼。</span></span>
+      <span class="go" aria-hidden="true">→</span>
+    </a>
 
     <section class="panel" aria-labelledby="search-label">
       <label id="search-label" for="name-input">🔎 教職員姓名</label>

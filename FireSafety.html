@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學校教職員消防編組與常識宣導(自衛消防編組)p</title>
+    <style>
+        :root {
+            --primary-color: #ffcccc; /* 粉色 */
+            --secondary-color: #ccffff; /* 天藍色 */
+            --accent-color: #ffffe0; /* 黃色 */
+            --text-color: #333;
+            --background-color: #fffaf0; /* 花白色 */
+            --highlight-color: #ffd700; /* 金色 */
+            --button-color: #b3e5fc;
+            --card-color: #ffffff;
+            --font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            border-bottom: 5px solid var(--highlight-color);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        header p {
+            margin: 5px 0 0;
+            font-size: 1em;
+        }
+
+        nav {
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+        }
+
+        nav button {
+            background-color: var(--secondary-color);
+            border: none;
+            color: var(--text-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        nav button:hover {
+            background-color: var(--button-color);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .section {
+            display: none;
+            background-color: var(--card-color);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            text-align: center;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        .chibi-char {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .chibi-char img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary-color);
+        }
+
+        /* 佔位圖片樣式，用戶替換後可移除 */
+        .chibi-char .placeholder-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            background-color: var(--accent-color);
+        }
+
+        .chibi-char-content {
+            flex: 1;
+        }
+
+        .chibi-char-content h3 {
+            margin: 0 0 10px;
+            color: #555;
+        }
+
+        .chibi-char-content ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #666;
+        }
+
+        .chibi-char-content ul li {
+            margin-bottom: 5px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .info-card {
+            background-color: #fefefe;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .info-card h4 {
+            margin: 10px 0;
+            color: var(--text-color);
+        }
+
+        .info-card p {
+            font-size: 0.9em;
+            color: #777;
+            margin: 0;
+        }
+
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: #ffa000;
+        }
+
+        .pass-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .pass-list li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pass-icon {
+            font-size: 1.5em;
+        }
+
+        footer {
+            margin-top: auto;
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 10px;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>學校教職員消防宣導</h1>
+    <p>輕鬆學，守護校園安全！</p>
+</header>
+
+<nav>
+    <button onclick="showSection('organization')">自衛消防編組</button>
+    <button onclick="showSection('knowledge')">消防常識預防</button>
+</nav>
+
+<div class="container">
+    <div id="organization" class="section active">
+        <h2>🏫 自衛消防編組任務 📖</h2>
+
+        <div class="chibi-char" style="background-color: #ffcccc;">
+            <div class="placeholder-img">👑</div>
+            <div class="chibi-char-content">
+                <h3>指揮官 / 副指揮官</h3>
+                <ul>
+                    <li>負責初期應變之指揮與協調。</li>
+                    <li>決定是否通報消防單位（119）。</li>
+                    <li>確認各班任務執行情況。</li>
+                    <li>成立自衛消防隊指揮所。</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="chibi-char" style="background-color: #ccffff;">
+            <div class="placeholder-img">📢</div>
+            <div class="chibi-char-content">
+                <h3>通報班</h3>
+                <ul>
+                    <li>利用廣播、警鈴通知校內師生。</li>
+                    <li>撥打119向消防單位報案，告知詳細地點、狀況。</li>
+                    <li>使用無線電或對講機與指揮所保持聯繫。</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="chibi-char" style="background-color: #ffffe0;">
+            <div class="placeholder-img">🚒</div>
+            <div class="chibi-char-content">
+                <h3>滅火班</h3>
+                <ul>
+                    <li>使用滅火器或室內消防栓進行初期滅火。</li>
+                    <li>若火勢過大，以安全為第一，配合避難引導班。</li>
+                    <li>定期保養與檢查滅火設備。</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="chibi-char" style="background-color: #b3e5fc;">
+            <div class="placeholder-img">🏃‍♂️</div>
+            <div class="chibi-char-content">
+                <h3>避難引導班</h3>
+                <ul>
+                    <li>引導師生按預定避難路線逃生。</li>
+                    <li>開啟安全門，移除避難障礙物。</li>
+                    <li>確認教室內無人受困，關閉房門。</li>
+                    <li>在集結點進行人數清點。</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="chibi-char" style="background-color: #e6e6fa;">
+            <div class="placeholder-img">🛡️</div>
+            <div class="chibi-char-content">
+                <h3>安全防護班</h3>
+                <ul>
+                    <li>關閉非必要之氣體、電力來源。</li>
+                    <li>確認防火門、防火鐵捲門之關閉。</li>
+                    <li>引導消防人員進入事故地點。</li>
+                    <li>在現場周圍設置管制線，維持秩序。</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="chibi-char" style="background-color: #fdfd96;">
+            <div class="placeholder-img">🩹</div>
+            <div class="chibi-char-content">
+                <h3>救護班（補充任務）</h3>
+                <ul>
+                    <li>負責傷患之緊急包紮與止血。</li>
+                    <li>對無呼吸心跳者進行心肺復甦術（CPR）及AED使用。</li>
+                    <li>將傷患搬運至安全地帶或救護車上。</li>
+                    <li>與緊急醫療單位取得聯繫，交接傷患資訊。</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="knowledge" class="section">
+        <h2>🔥 消防常識與火災預防 🔥</h2>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="icon-box">⚡</div>
+                <h4>火災預防 - 電器安全</h4>
+                <p>拔掉插頭不拉線、電線不捆綁、插座不超載。</p>
+            </div>
+            <div class="info-card">
+                <div class="icon-box">🍳</div>
+                <h4>火災預防 - 廚房用火</h4>
+                <p>人離火熄、定期清理油垢、常備滅火器。</p>
+            </div>
+            <div class="info-card">
+                <div class="icon-box">🚭</div>
+                <h4>火災預防 - 菸頭與明火</h4>
+                <p>菸蒂需確實熄滅、勿隨意亂丟；校園內禁止吸菸。</p>
+            </div>
+            <div class="info-card">
+                <div class="icon-box">🗑️</div>
+                <h4>火災預防 - 環境整理</h4>
+                <p>雜物不堆放安全通道、防火門，隨手關門。</p>
+            </div>
+        </div>
+
+        <h3>🧯 初期滅火與報警 📞</h3>
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="icon-box">PASS</div>
+                <h4>滅火器使用 (PASS)</h4>
+                <ul class="pass-list">
+                    <li><span class="pass-icon">拔</span> (P) - 拔下保險銷</li>
+                    <li><span class="pass-icon">瞄</span> (A) - 瞄準火源根部</li>
+                    <li><span class="pass-icon">壓</span> (S) - 壓下把手</li>
+                    <li><span class="pass-icon">掃</span> (S) - 左右掃射</li>
+                </ul>
+            </div>
+            <div class="info-card">
+                <div class="icon-box">🏠</div>
+                <h4>室內消防栓使用</h4>
+                <ol style="text-align: left;">
+                    <li>開：打開箱門</li>
+                    <li>拿：拿出水帶、瞄子</li>
+                    <li>拉：將水帶拉直</li>
+                    <li>轉：轉開水閥放水</li>
+                </ul>
+            </div>
+            <div class="info-card">
+                <div class="icon-box">119</div>
+                <h4>報警方法 (119)</h4>
+                <ul style="text-align: left;">
+                    <li>告知詳細地點與建築物名稱。</li>
+                    <li>告知火災種類（電器、油類等）。</li>
+                    <li>告知火勢狀況、是否有人受困。</li>
+                    <li>留姓名、電話，勿先掛斷。</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>🏃 避難逃生原則 🏃‍♀️</h3>
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="icon-box">⬇️</div>
+                <h4>向下逃生</h4>
+                <p>沿著安全梯向下逃生，勿搭乘電梯。</p>
+            </div>
+            <div class="info-card">
+                <div class="icon-box">🚪</div>
+                <h4>低姿勢與防煙</h4>
+                <p>以低姿勢逃生，利用濕手帕或衣服捂住口鼻（防濃煙）。</p>
+            </div>
+            <div class="info-card">
+                <div class="icon-box">關</div>
+                <h4>隨手關門</h4>
+                <p>離開房間或進入安全梯時，隨手關門以阻絕火勢和濃煙。</p>
+            </div>
+            <div class="info-card">
+                <div class="icon-box">🤷</div>
+                <h4>勿返現場</h4>
+                <p>逃出後絕不返回火場取物。</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    <p>© 2024 校園安全宣導小組 - 可愛動漫風</p>
+</footer>
+
+<script>
+    function showSection(sectionId) {
+        // 隱藏所有 section
+        const sections = document.querySelectorAll('.section');
+        sections.forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // 顯示點擊的 section
+        const selectedSection = document.getElementById(sectionId);
+        selectedSection.classList.add('active');
+    }
+</script>
+
+</body>
+</html>

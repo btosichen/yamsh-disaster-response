@@ -22,6 +22,13 @@ SCENARIO_OVERRIDE = "115年09月21日9時21分（第二節上課）時段，臺�
 # up the preceding role's text.
 FIRST_ROLE_STARTS = [7, 9, 12, 15, 18, 21, 23, 24]
 SECOND_ROLE_STARTS = [8, 10, 13, 16, 19, 21, 23, 24]
+TEAM_PROXIES = {
+    "通報組": "楊麗雯",
+    "避難引導組": "周峻民",
+    "搶救組": "林承恩",
+    "安全防護組": "王為倩",
+    "緊急救護組": "林淳雅",
+}
 
 
 def clean(text: str) -> str:
@@ -43,6 +50,36 @@ def unique_ranges(row) -> list[dict[str, object]]:
             ranges.append({"start": grid_index, "end": grid_index, "text": clean(cell.text)})
             previous = key
     return ranges
+
+
+def roster_team_summaries(path: Path) -> dict[str, str]:
+    document = Document(path)
+    groups: dict[str, dict[str, list[str]]] = {}
+    for row in document.tables[0].rows[1:]:
+        raw_group = re.sub(r"\s+", "", row.cells[0].text)
+        if raw_group in {"指揮官", "指揮官代理人", "發言人"}:
+            continue
+        group = raw_group.split("（", 1)[0]
+        role = re.sub(r"\s+", "", row.cells[1].text)
+        names = [p.text.strip() for p in row.cells[2].paragraphs if p.text.strip() and not p.text.strip().startswith("*")]
+        groups.setdefault(group, {})[role] = names
+    summaries = {}
+    for group, rows in groups.items():
+        leaders = "、".join(rows.get("組長", []))
+        members = rows.get("組員", [])
+        parts = [f"組長：{leaders}"]
+        proxy = TEAM_PROXIES.get(group)
+        if proxy and proxy in members:
+            parts.append(f"代理：{proxy}")
+        parts.append(f"組員{len(members)}人")
+        if group == "搶救組":
+            parts.append("*高中專任（含外師）另列附表")
+        elif group == "避難引導組":
+            parts.append("*國高中導師另列附表")
+        elif group == "安全防護組":
+            parts.append("*國中專任另列附表")
+        summaries[group] = "\n".join(parts)
+    return summaries
 
 
 def regular_step(table, row_no: int, layout: str) -> dict[str, object]:
@@ -82,7 +119,7 @@ def note_step(table, row_no: int, title: str, starts: list[int]) -> dict[str, ob
     }
 
 
-def build(source: Path) -> dict[str, object]:
+def build(source: Path, roster: Path | None = None) -> dict[str, object]:
     document = Document(source)
     table = document.tables[0]
     settings = []
@@ -94,10 +131,14 @@ def build(source: Path) -> dict[str, object]:
     team_values = table.rows[10]
     team_starts = FIRST_ROLE_STARTS
     teams = []
+    roster_summaries = roster_team_summaries(roster) if roster else {}
     for start in team_starts:
         role = at(team_header, start)
         members = at(team_values, start)
-        if role == "通報組" and "丁肆山" not in members:
+        role_key = re.sub(r"\s+", "", role)
+        if role_key in roster_summaries:
+            members = roster_summaries[role_key]
+        elif role == "通報組" and "丁肆山" not in members:
             members = f"{members}\n名冊更新：新增丁肆山（保全），通報組共10名組員"
         teams.append({"role": role, "members": "" if members == role else members})
 
@@ -161,12 +202,13 @@ def build(source: Path) -> dict[str, object]:
 
 
 def main() -> None:
-    if len(sys.argv) != 2:
-        raise SystemExit("請提供防災演練腳本 DOCX 路徑。")
+    if len(sys.argv) not in {2, 3}:
+        raise SystemExit("請提供防災演練腳本 DOCX 路徑，以及選填的最新分組表 DOCX。")
     source = Path(sys.argv[1]).resolve()
     if not source.exists():
         raise SystemExit(f"找不到檔案：{source}")
-    data = build(source)
+    roster = Path(sys.argv[2]).resolve() if len(sys.argv) == 3 else None
+    data = build(source, roster)
     output = Path(__file__).resolve().parents[1] / "drill-data.js"
     output.write_text(
         f"// 由 scripts/build_drill_data.py 從 {source.name} 產生，請勿手動編輯。\n"

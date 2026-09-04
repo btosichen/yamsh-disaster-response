@@ -6,7 +6,7 @@
 - 防災演練互動腳本：`drill-script.html` + `drill-data.js`
 - Google 試算表側邊欄：`Code.gs` + `Sidebar.html`
 
-目前資料以「115學年度緊急應變小組_1150821_職稱修正版_人員不重複版_新增丁肆山.docx」為準，共 178 筆任務指派、178 位不重複姓名；每人僅保留一項主要任務。
+目前資料以「115學年度緊急應變小組_1150907_職稱校正版_人員不重複版.docx」為準，共 200 筆任務指派、200 位不重複姓名（含保全支援人員丁肆山）；每人僅保留一項主要任務。
 
 ## GitHub Pages
 
@@ -28,7 +28,7 @@ python -m http.server 8000
 更新 Word 分組表後，執行：
 
 ```powershell
-python scripts/build_data.py "115學年度緊急應變小組_1150821_職稱修正版_人員不重複版.docx"
+python scripts/build_data.py "115學年度緊急應變小組_1150907_職稱校正版_人員不重複版.docx"
 ```
 
 接著重新提交產生的 `staff-data.js`。
@@ -38,7 +38,7 @@ python scripts/build_data.py "115學年度緊急應變小組_1150821_職稱修�
 更新矩陣式腳本 Word 檔後，執行：
 
 ```powershell
-python scripts/build_drill_data.py "115臺北市防災教育輔導團防災演練矩陣式腳本設計指引_陽明高中.docx"
+python scripts/build_drill_data.py "115臺北市防災教育輔導團防災演練矩陣式腳本設計指引_陽明高中.docx" "115學年度緊急應變小組_1150907_職稱校正版_人員不重複版.docx"
 ```
 
 接著重新提交產生的 `drill-data.js`。

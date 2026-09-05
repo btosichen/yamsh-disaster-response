@@ -70,12 +70,16 @@
     .quick-guide strong { display: block; margin-bottom: 3px; color: var(--ink); }
     .quick-guide p { margin: 2px 0; }
     .quick-guide p[lang="en"] { color: #5e6875; }
-    .drill-launch { display: grid; grid-template-columns: 92px 1fr auto; align-items: center; gap: 16px; margin-top: 20px; padding: 15px 18px; color: var(--ink); background: linear-gradient(135deg, #fff 0 68%, #bcefff 68%); border: var(--line); border-radius: 20px; box-shadow: var(--shadow); text-decoration: none; transition: transform .15s, box-shadow .15s; }
+    .launch-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 20px; }
+    .drill-launch { display: grid; grid-template-columns: 82px 1fr auto; align-items: center; gap: 14px; min-width: 0; padding: 15px 16px; color: var(--ink); background: linear-gradient(135deg, #fff 0 68%, #bcefff 68%); border: var(--line); border-radius: 20px; box-shadow: var(--shadow); text-decoration: none; transition: transform .15s, box-shadow .15s; }
     .drill-launch:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--ink); }
-    .drill-launch svg { width: 86px; filter: drop-shadow(3px 4px 0 var(--ink)); }
+    .drill-launch svg, .drill-launch > img { width: 76px; height: 76px; object-fit: contain; filter: drop-shadow(3px 4px 0 var(--ink)); }
     .drill-launch strong { display: block; color: #9d263a; font-size: clamp(1.1rem, 3vw, 1.45rem); }
     .drill-launch span { display: block; margin-top: 4px; color: var(--muted); font-size: .88rem; font-weight: 750; line-height: 1.5; }
     .drill-launch .go { display: grid; place-items: center; width: 42px; height: 42px; color: white; background: var(--red); border: 2px solid var(--ink); border-radius: 50%; font-size: 1.35rem; font-weight: 950; }
+    .fire-launch { background: linear-gradient(135deg, #fff 0 68%, #ffe39a 68%); }
+    .fire-launch strong { color: #b22b1f; }
+    .fire-launch .go { background: var(--orange); }
     .panel { margin-top: 26px; padding: clamp(20px, 4vw, 30px); background: white; }
     .panel label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 1.08rem; }
     .search-row { display: flex; gap: 12px; }
@@ -232,8 +236,9 @@
       .cycle-grid { grid-template-columns: repeat(2, 1fr); }
       .command-grid, .team-grid { grid-template-columns: 1fr; }
       .command-card.commander { transform: none; }
+      .launch-grid { grid-template-columns: 1fr; }
       .drill-launch { grid-template-columns: 70px 1fr; }
-      .drill-launch svg { width: 65px; }
+      .drill-launch svg, .drill-launch > img { width: 65px; height: 65px; }
       .drill-launch .go { display: none; }
     }
     @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; animation: none !important; } }
@@ -253,18 +258,26 @@
       <p lang="en">This system helps staff check their emergency response assignment and duties. Enter the staff member's full Chinese name.</p>
     </section>
 
-    <a class="drill-launch" href="drill-script.html" aria-label="開啟防災演練互動腳本">
-      <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
-        <path d="M60 6 106 24v33c0 29-18 47-46 57C32 104 14 86 14 57V24Z" fill="#55d8e6" stroke="#18212f" stroke-width="5"/>
-        <path d="M28 43c3-22 16-29 32-29s29 7 32 29Z" fill="#ffd84d" stroke="#18212f" stroke-width="5"/>
-        <rect x="56" y="17" width="8" height="22" rx="2" fill="#d92f45"/><rect x="48" y="24" width="24" height="8" rx="2" fill="#d92f45"/>
-        <circle cx="44" cy="63" r="4" fill="#18212f"/><circle cx="76" cy="63" r="4" fill="#18212f"/>
-        <path d="M45 78c9 8 21 8 30 0" fill="none" stroke="#18212f" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="32" cy="74" r="6" fill="#ff8caf"/><circle cx="88" cy="74" r="6" fill="#ff8caf"/>
-      </svg>
-      <span><strong>🎬 防災演練互動腳本</strong><span>依時間與角色查看行動、逐步勾選演練進度，一看就知道現在該做什麼。</span></span>
-      <span class="go" aria-hidden="true">→</span>
-    </a>
+    <div class="launch-grid" aria-label="防災學習快速入口">
+      <a class="drill-launch" href="drill-script.html" aria-label="開啟防災演練互動腳本">
+        <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+          <path d="M60 6 106 24v33c0 29-18 47-46 57C32 104 14 86 14 57V24Z" fill="#55d8e6" stroke="#18212f" stroke-width="5"/>
+          <path d="M28 43c3-22 16-29 32-29s29 7 32 29Z" fill="#ffd84d" stroke="#18212f" stroke-width="5"/>
+          <rect x="56" y="17" width="8" height="22" rx="2" fill="#d92f45"/><rect x="48" y="24" width="24" height="8" rx="2" fill="#d92f45"/>
+          <circle cx="44" cy="63" r="4" fill="#18212f"/><circle cx="76" cy="63" r="4" fill="#18212f"/>
+          <path d="M45 78c9 8 21 8 30 0" fill="none" stroke="#18212f" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="32" cy="74" r="6" fill="#ff8caf"/><circle cx="88" cy="74" r="6" fill="#ff8caf"/>
+        </svg>
+        <span><strong>🎬 防災演練互動腳本</strong><span>依時間與角色查看行動、逐步勾選演練進度。</span></span>
+        <span class="go" aria-hidden="true">→</span>
+      </a>
+
+      <a class="drill-launch fire-launch" href="FireSafety.html" aria-label="開啟自衛消防編組與消防常識說明">
+        <img src="fire-safety-mascot.png" alt="" aria-hidden="true" width="76" height="76">
+        <span><strong>🧯 自衛消防編組說明</strong><span>認識各班任務、初期滅火與校園用電安全。</span></span>
+        <span class="go" aria-hidden="true">→</span>
+      </a>
+    </div>
 
     <section class="panel" aria-labelledby="search-label">
       <label id="search-label" for="name-input">🔎 教職員姓名</label>

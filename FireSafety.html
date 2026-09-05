@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 臺北市立陽明高中自衛消防編組_學校教職員消防編組與常識宣導</title>
+    <title>臺北市立陽明高級中學 115學年度自衛消防編組與消防常識</title>
     <style>
         :root {
             --primary-color: #ffcccc; 
@@ -15,6 +15,10 @@
             --button-color: #b3e5fc;
             --card-color: #ffffff;
             --font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
 
         body {
@@ -49,6 +53,45 @@
             margin: 5px 0 0;
             font-size: 1.05em;
             color: #555;
+        }
+
+        .header-inner {
+            width: min(92%, 920px);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 112px 1fr 112px;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .header-mascot {
+            width: 108px;
+            height: 108px;
+            object-fit: contain;
+            filter: drop-shadow(3px 4px 0 rgba(45, 52, 54, .7));
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 9px 12px;
+            color: #2d3436;
+            background: #fff;
+            border: 2px solid #2d3436;
+            border-radius: 16px;
+            box-shadow: 3px 3px 0 #2d3436;
+            font-size: .9rem;
+            font-weight: bold;
+            line-height: 1.35;
+            text-decoration: none;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .back-home:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 #2d3436;
         }
 
         nav {
@@ -134,6 +177,19 @@
         }
 
         @media (max-width: 768px) {
+            .header-inner {
+                grid-template-columns: 76px 1fr;
+                gap: 10px;
+            }
+            .header-mascot {
+                width: 72px;
+                height: 72px;
+            }
+            .back-home {
+                grid-column: 1 / -1;
+                width: min(100%, 260px);
+                margin: 4px auto 0;
+            }
             .card-16-9 {
                 aspect-ratio: auto;
             }
@@ -260,8 +316,14 @@
 <body>
 
 <header>
-    <h1>學校教職員消防宣導</h1>
-    <p>輕鬆學，守護校園安全！</p>
+    <div class="header-inner">
+        <img class="header-mascot" src="fire-safety-mascot.png" alt="陽明高中消防安全吉祥物">
+        <div>
+            <h1>115學年度自衛消防編組</h1>
+            <p>消防常識與任務說明・輕鬆學，守護校園安全！</p>
+        </div>
+        <a class="back-home" href="index.html" aria-label="回到防災應變任務查詢">🔎 回任務查詢</a>
+    </div>
 </header>
 
 <nav>
@@ -468,7 +530,7 @@
 </div>
 
 <footer>
-    <p>© 2026 臺北市立陽明高中自衛消防編組</p>
+    <p>© 2026 臺北市立陽明高級中學・115學年度自衛消防編組</p>
 </footer>
 
 <script>

@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 650" width="100%" height="auto" style="background-color: #ffffff; font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial', sans-serif;">
+  <defs>
+    <!-- 箭頭標記 -->
+    <marker id="manga-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#FF4757"/>
+    </marker>
+    <!-- 柔和陰影 -->
+    <filter id="soft-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="3" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- 1. 延長線電線 (日式流線) -->
+  <path d="M 220 230 C 200 200, 180 180, 230 150 C 270 120, 260 80, 250 20" fill="none" stroke="#2F3542" stroke-width="12" stroke-linecap="round"/>
+  <path d="M 220 230 C 200 200, 180 180, 230 150 C 270 120, 260 80, 250 20" fill="none" stroke="#E2E8F0" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- 2. 延長線本體 (日式圓潤 Q 版風格) -->
+  <g filter="url(#soft-shadow)">
+    <!-- 外殼底層 -->
+    <rect x="150" y="220" width="130" height="380" rx="40" fill="#2F3542" />
+    <rect x="154" y="224" width="122" height="372" rx="36" fill="#F8F9FA" />
+    <rect x="160" y="230" width="110" height="360" rx="32" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+
+    <!-- 銘牌文字與開關區域 -->
+    <rect x="175" y="260" width="80" height="24" rx="5" fill="#FFF0F2" stroke="#FF4757" stroke-width="1.5"/>
+    <text x="215" y="272" font-size="8" font-weight="bold" fill="#2F3542" text-anchor="middle">AC 125V 60Hz</text>
+    <text x="215" y="281" font-size="8" font-weight="bold" fill="#FF4757" text-anchor="middle">11A / 1210W</text>
+
+    <!-- 主開關 (亮紅色動漫感) -->
+    <rect x="180" y="295" width="70" height="32" rx="8" fill="#2F3542"/>
+    <rect x="184" y="299" width="62" height="24" rx="6" fill="#FF4757"/>
+    <path d="M 188 303 L 242 303 L 238 319 L 188 319 Z" fill="#FF6B81"/> <!-- 高光 -->
+
+    <!-- 插座孔 1 -->
+    <g transform="translate(182, 350)">
+      <rect x="0" y="0" width="66" height="50" rx="10" fill="#F1F2F6" stroke="#CED6E0" stroke-width="2"/>
+      <rect x="18" y="12" width="8" height="26" rx="3" fill="#2F3542"/>
+      <rect x="40" y="12" width="8" height="26" rx="3" fill="#2F3542"/>
+    </g>
+
+    <!-- 插座孔 2 -->
+    <g transform="translate(182, 420)">
+      <rect x="0" y="0" width="66" height="50" rx="10" fill="#F1F2F6" stroke="#CED6E0" stroke-width="2"/>
+      <rect x="18" y="12" width="8" height="26" rx="3" fill="#2F3542"/>
+      <rect x="40" y="12" width="8" height="26" rx="3" fill="#2F3542"/>
+    </g>
+
+    <!-- 插座孔 3 -->
+    <g transform="translate(182, 490)">
+      <rect x="0" y="0" width="66" height="50" rx="10" fill="#F1F2F6" stroke="#CED6E0" stroke-width="2"/>
+      <rect x="18" y="12" width="8" height="26" rx="3" fill="#2F3542"/>
+      <rect x="40" y="12" width="8" height="26" rx="3" fill="#2F3542"/>
+    </g>
+  </g>
+
+  <!-- 3. 紅色虛線圈 (強調開關區域) -->
+  <circle cx="215" cy="290" r="55" fill="none" stroke="#FF4757" stroke-width="4" stroke-dasharray="8,6"/>
+
+  <!-- 4. 指向特寫區的指示箭頭 -->
+  <path d="M 255 250 Q 300 200 325 175" fill="none" stroke="#FF4757" stroke-width="4" stroke-dasharray="6,4" marker-end="url(#manga-arrow)"/>
+
+  <!-- 5. 日式漫畫特寫放大圈 (Magnified Callout Circle) -->
+  <g filter="url(#soft-shadow)" transform="translate(340, 140)">
+    <!-- 背景大白圈 -->
+    <circle cx="0" cy="0" r="110" fill="#2F3542"/>
+    <circle cx="0" cy="0" r="104" fill="#FFFFFF" stroke="#FF7B9C" stroke-width="4"/>
+    <circle cx="0" cy="0" r="96" fill="#FFF5F7"/>
+
+    <!-- 漫畫動感裝飾光芒 -->
+    <path d="M -80 -70 L -60 -50 M 70 -60 L 50 -45 M -70 60 L -50 45" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- 放大版的文字標籤卡 -->
+    <rect x="-75" y="-70" width="150" height="58" rx="10" fill="#FFFFFF" stroke="#2F3542" stroke-width="3"/>
+    <text x="0" y="-42" font-size="16" font-weight="900" fill="#2F3542" text-anchor="middle" letter-spacing="0.5">AC 125V 60Hz</text>
+    <text x="0" y="-20" font-size="17" font-weight="900" fill="#FF4757" text-anchor="middle" letter-spacing="0.5">11A / 1210W</text>
+
+    <!-- 放大版紅開關 -->
+    <rect x="-65" y="5" width="130" height="55" rx="12" fill="#2F3542"/>
+    <rect x="-58" y="12" width="116" height="41" rx="8" fill="#FF4757"/>
+    <path d="M -50 18 L 50 18 L 42 45 L -50 45 Z" fill="#FF6B81"/> <!-- 動漫高光 -->
+    <text x="0" y="38" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">RESET / OFF</text>
+  </g>
+
+  <!-- 日式小星號裝飾 -->
+  <path d="M 70 180 L 75 195 L 90 200 L 75 205 L 70 220 L 65 205 L 50 200 L 65 195 Z" fill="#FFD700"/>
+  <path d="M 420 320 L 423 330 L 433 333 L 423 336 L 420 346 L 417 336 L 407 333 L 417 330 Z" fill="#FFD700"/>
+</svg>

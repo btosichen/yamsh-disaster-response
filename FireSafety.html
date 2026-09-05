@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>學校教職員消防編組與常識宣導 Web App</title>
+    <title>2026 自衛消防編組_學校教職員消防編組與常識宣導</title>
     <style>
         :root {
             --primary-color: #ffcccc; /* 粉色 */
@@ -143,7 +143,7 @@
             }
         }
 
-        /* 編組卡片 */
+        /* 編组卡片 */
         .chibi-char {
             display: flex;
             align-items: center;
@@ -191,11 +191,12 @@
 
         .info-card img {
             width: 100%;
-            max-width: 240px;
+            max-width: 280px;
             height: auto;
             border-radius: 12px;
             margin-bottom: 12px;
             border: 2px solid var(--primary-color);
+            object-fit: cover;
         }
 
         .info-card h4 {
@@ -342,12 +343,12 @@
         <h3>📱 常見電器與 3C 用電安全</h3>
         <div class="info-grid">
             <div class="info-card">
-                <img src="watermarked_img_11054358936253198594.png" alt="插頭過載示意圖">
+                <img src="https://btosichen.github.io/yamsh-disaster-response/G1.png" alt="插座過載危險">
                 <h4>1. 插座過載危險 (Overloading)</h4>
                 <p>切勿在同一插座或延長線插入過多高功率電器，避免發熱走火。</p>
             </div>
             <div class="info-card">
-                <img src="watermarked_img_6655682462462138654.png" alt="不合格行動電源示意圖">
+                <img src="https://btosichen.github.io/yamsh-disaster-response/g2.png" alt="未認證行動電源">
                 <h4>2. 未認證行動電源 (Power Bank Safety)</h4>
                 <p>拒用劣質鋰電池及無安全認證(BSMI)的行動電源，若膨脹發熱請立即停用。</p>
             </div>
@@ -465,18 +466,16 @@
 </div>
 
 <footer>
-    <p>© 2024 校園安全宣導小組 - 日式可愛風消防 Web App</p>
+    <p>© 2026 自衛消防編組</p>
 </footer>
 
 <script>
     function showSection(sectionId) {
-        // 切換 Section 顯示
         const sections = document.querySelectorAll('.section');
         sections.forEach(section => {
             section.classList.remove('active');
         });
 
-        // 切換 Button 標示
         const buttons = document.querySelectorAll('nav button');
         buttons.forEach(btn => {
             btn.classList.remove('active-btn');

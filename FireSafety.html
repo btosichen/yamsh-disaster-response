@@ -286,7 +286,7 @@
             </div>
 
             <div class="card-16-9-body">
-                <!-- 左側：規格標示與日式Q版銘牌示意圖 -->
+                <!-- 左側：規格標示與延長線 SVG 示意圖 -->
                 <div style="flex: 1; background: white; border-radius: 15px; padding: 12px; border: 2px dashed #ffa502; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center;">
                     
                     <div>
@@ -296,48 +296,8 @@
                         </div>
                     </div>
 
-                    <!-- 新增：日式 Q 版「延長線銘牌放大特寫」示意圖 (填補空白) -->
-                    <div style="width: 100%; max-width: 300px; margin: 4px 0;">
-                        <svg viewBox="0 0 320 135" width="100%" height="100%" style="overflow: visible;">
-                            <defs>
-                                <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#FF4757"/>
-                                </marker>
-                            </defs>
-
-                            <!-- 延長線本體 -->
-                            <rect x="15" y="55" width="125" height="45" rx="12" fill="#F4F6F8" stroke="#ff7b9c" stroke-width="2.5"/>
-                            <!-- 插座孔 x2 -->
-                            <rect x="70" y="67" width="7" height="20" rx="2" fill="#747D8C"/>
-                            <rect x="83" y="67" width="7" height="20" rx="2" fill="#747D8C"/>
-                            <rect x="103" y="67" width="7" height="20" rx="2" fill="#747D8C"/>
-                            <rect x="116" y="67" width="7" height="20" rx="2" fill="#747D8C"/>
-
-                            <!-- 開關區域與紅圈虛線 -->
-                            <rect x="25" y="63" width="30" height="28" rx="6" fill="#FFEAA7" stroke="#FDCB6E" stroke-width="2"/>
-                            <rect x="31" y="70" width="18" height="14" rx="3" fill="#FF4757"/> 
-                            <circle cx="40" cy="77" r="23" fill="none" stroke="#FF4757" stroke-width="2.5" stroke-dasharray="4,3"/>
-
-                            <!-- 放大箭頭 -->
-                            <path d="M 58 60 Q 80 32 110 30" fill="none" stroke="#FF4757" stroke-width="2.5" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
-
-                            <!-- 日式放大特寫銘牌卡片 -->
-                            <g transform="translate(112, 5)">
-                                <rect x="0" y="0" width="188" height="70" rx="12" fill="#FFFFFF" stroke="#FF7B9C" stroke-width="2.5" filter="drop-shadow(2px 3px 5px rgba(0,0,0,0.08))"/>
-                                <!-- 安全開關 -->
-                                <rect x="12" y="15" width="38" height="40" rx="7" fill="#FF4757"/>
-                                <rect x="18" y="21" width="26" height="28" rx="4" fill="#FF6B81"/>
-                                <!-- 規格文字框 -->
-                                <rect x="58" y="12" width="118" height="46" rx="8" fill="#FFF0F3"/>
-                                <text x="117" y="30" font-family="sans-serif" font-size="11" font-weight="bold" fill="#2D3436" text-anchor="middle">AC 125V 60Hz</text>
-                                <text x="117" y="48" font-family="sans-serif" font-size="12" font-weight="900" fill="#D63031" text-anchor="middle">11A / 1210W</text>
-                            </g>
-
-                            <!-- 日式可愛裝飾點綴 -->
-                            <path d="M 8 28 L 11 34 L 17 35 L 12 39 L 14 45 L 8 42 L 2 45 L 4 39 L -1 35 L 5 34 Z" fill="#FFD700"/>
-                            <path d="M 308 85 L 310 89 L 314 90 L 311 93 L 312 97 L 308 95 L 304 97 L 305 93 L 302 90 L 306 89 Z" fill="#FFD700"/>
-                        </svg>
-                    </div>
+                    <!-- 延長線額定承載量 SVG 示意圖 -->
+                    <img src="https://btosichen.github.io/yamsh-disaster-response/Powerstrip.svg" alt="延長線額定承載量示意圖" style="width: 100%; max-width: 240px; height: auto; margin: 6px 0; object-fit: contain;">
 
                     <p style="font-size: 0.8rem; color: #57606f; margin: 2px 0;">檢查延長線開關旁標示，勿超標使用！</p>
 

@@ -220,6 +220,13 @@
     .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
     .video-link { display: inline-block; margin-top: 10px; color: #315f8e; font-size: .83rem; font-weight: 750; text-underline-offset: 2px; }
     .video-link:hover { color: var(--red); }
+    .map-resource { margin-top: 34px; padding: clamp(18px, 4vw, 26px); background: #eef8ff; border: var(--line); box-shadow: var(--shadow); border-radius: 22px; }
+    .map-resource h2 { margin: 0 0 7px; font-size: 1.28rem; }
+    .map-resource p { margin: 0; color: var(--muted); font-size: .9rem; line-height: 1.65; }
+    .resource-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .resource-button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 16px; color: var(--ink); background: var(--yellow); border: 2px solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 var(--ink); font-weight: 900; text-decoration: none; }
+    .resource-button.video { color: white; background: var(--red); }
+    .resource-button:hover { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--ink); }
     .legal-basis { margin-top: 34px; padding: 12px 14px; color: #69717b; background: rgb(255 255 255 / .72); border: 1px solid #c9cfd6; border-radius: 10px; font-size: .78rem; line-height: 1.7; text-align: center; }
     .legal-basis strong { color: #4d5661; }
     .legal-basis a { color: #315f8e; text-underline-offset: 2px; }
@@ -228,7 +235,7 @@
     .design-credit { margin-top: 5px; color: #4d5661; font-weight: 750; }
     @media (max-width: 620px) {
       .shell { width: min(100% - 20px, 900px); padding-top: 12px; }
-      .hero, .panel, .result-card, .notice, .teacher-guide, .mission-handbook, .video-card { border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); }
+      .hero, .panel, .result-card, .notice, .teacher-guide, .mission-handbook, .video-card, .map-resource { border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); }
       .search-row { flex-direction: column; }
       .search-button { width: 100%; }
       .facts { grid-template-columns: 1fr; }
@@ -531,6 +538,15 @@
           allowfullscreen></iframe>
       </div>
       <a class="video-link" href="https://youtu.be/33Gu3PKLKpg?si=Qjt_we2Qkr0mWKnD" target="_blank" rel="noopener noreferrer">無法播放時，請前往 YouTube 觀看 ↗</a>
+    </section>
+
+    <section class="map-resource" aria-labelledby="campus-map-title">
+      <h2 id="campus-map-title">🗺️ 校園防災地圖（地震災害）</h2>
+      <p>臺北市立陽明高級中學｜114年版。請先熟悉避難路線、疏散方向及集合地點。</p>
+      <div class="resource-actions">
+        <a class="resource-button" href="https://www.ymsh.tp.edu.tw/wp-content/uploads/doc/ym140/%E6%A0%A1%E5%9C%92%E9%98%B2%E7%81%BD%E5%9C%B0%E5%9C%96(%E5%9C%B0%E9%9C%87%E7%81%BD%E5%AE%B3)114%E5%B9%B4%E7%89%88.pdf" target="_blank" rel="noopener noreferrer">📄 開啟 PDF 地圖</a>
+        <a class="resource-button video" href="https://drive.google.com/file/d/1Xevl0GqW6dDIbd_1ivJ3BiTQQVrj0hx7/view?usp=sharing" target="_blank" rel="noopener noreferrer">▶ 觀看說明影片</a>
+      </div>
     </section>
 
     <aside class="legal-basis" aria-label="法源依據與防災參考">

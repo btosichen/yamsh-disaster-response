@@ -66,6 +66,12 @@
     }
     h1 { position: relative; z-index: 1; margin: 16px 0 10px; font-size: clamp(1.8rem, 5vw, 3rem); line-height: 1.18; text-shadow: 3px 3px 0 var(--ink); }
     .hero p { position: relative; z-index: 1; max-width: 650px; margin: 0; font-weight: 700; }
+    .map-alert { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 16px; margin-top: 22px; padding: 16px 18px; color: var(--ink); background: linear-gradient(135deg, #fff4a8, var(--yellow)); border: 4px solid var(--red); border-radius: 18px; box-shadow: 6px 6px 0 var(--ink); text-decoration: none; transition: transform .15s, box-shadow .15s; }
+    .map-alert:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--ink); }
+    .map-alert-icon { font-size: clamp(2.2rem, 7vw, 3.4rem); line-height: 1; }
+    .map-alert strong { display: block; color: #9d263a; font-size: clamp(1.08rem, 3vw, 1.4rem); }
+    .map-alert span { display: block; margin-top: 3px; font-size: .88rem; font-weight: 800; line-height: 1.45; }
+    .map-alert-go { display: grid !important; place-items: center; width: 46px; height: 46px; margin: 0 !important; color: white; background: var(--red); border: 2px solid var(--ink); border-radius: 50%; font-size: 1.4rem !important; font-weight: 950 !important; }
     .quick-guide { margin-top: 18px; padding: 13px 16px; color: #46515e; background: rgb(255 255 255 / .82); border: 2px solid var(--ink); border-radius: 13px; font-size: .86rem; line-height: 1.55; }
     .quick-guide strong { display: block; margin-bottom: 3px; color: var(--ink); }
     .quick-guide p { margin: 2px 0; }
@@ -238,6 +244,8 @@
       .hero, .panel, .result-card, .notice, .teacher-guide, .mission-handbook, .video-card, .map-resource { border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); }
       .search-row { flex-direction: column; }
       .search-button { width: 100%; }
+      .map-alert { grid-template-columns: auto 1fr; gap: 11px; }
+      .map-alert-go { display: none !important; }
       .facts { grid-template-columns: 1fr; }
       .guide-principles, .module-grid, .technique-grid, .org-brief ul { grid-template-columns: 1fr; }
       .cycle-grid { grid-template-columns: repeat(2, 1fr); }
@@ -258,6 +266,12 @@
       <h1>臺北市立陽明高級中學<br>115學年度防災應變任務查詢</h1>
       <p>輸入教職員完整姓名，立即查看緊急應變小組、自衛消防編組與負責任務。</p>
     </header>
+
+    <a class="map-alert" href="https://www.ymsh.tp.edu.tw/wp-content/uploads/doc/ym140/%E6%A0%A1%E5%9C%92%E9%98%B2%E7%81%BD%E5%9C%B0%E5%9C%96(%E5%9C%B0%E9%9C%87%E7%81%BD%E5%AE%B3)114%E5%B9%B4%E7%89%88.pdf" target="_blank" rel="noopener noreferrer" aria-label="開啟114年版校園防災地圖（地震災害）PDF">
+      <span class="map-alert-icon" aria-hidden="true">🗺️</span>
+      <span><strong>緊急避難必看｜校園防災地圖</strong><span>地震災害114年版・立即確認逃生路線與集合地點</span></span>
+      <span class="map-alert-go" aria-hidden="true">→</span>
+    </a>
 
     <section class="quick-guide" aria-label="雙語使用說明">
       <strong>使用說明｜Quick Guide</strong>

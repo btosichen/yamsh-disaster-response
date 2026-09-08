@@ -72,6 +72,10 @@
     .map-alert strong { display: block; color: #9d263a; font-size: clamp(1.08rem, 3vw, 1.4rem); }
     .map-alert span { display: block; margin-top: 3px; font-size: .88rem; font-weight: 800; line-height: 1.45; }
     .map-alert-go { display: grid !important; place-items: center; width: 46px; height: 46px; margin: 0 !important; color: white; background: var(--red); border: 2px solid var(--ink); border-radius: 50%; font-size: 1.4rem !important; font-weight: 950 !important; }
+    .map-preview { margin: 18px 0 0; padding: 10px; background: white; border: var(--line); border-radius: 18px; box-shadow: var(--shadow); }
+    .map-preview a { display: block; }
+    .map-preview img { display: block; width: 100%; height: auto; border: 1px solid #aeb7c2; border-radius: 10px; }
+    .map-preview figcaption { margin-top: 9px; color: var(--muted); font-size: .82rem; font-weight: 750; text-align: center; }
     .quick-guide { margin-top: 18px; padding: 13px 16px; color: #46515e; background: rgb(255 255 255 / .82); border: 2px solid var(--ink); border-radius: 13px; font-size: .86rem; line-height: 1.55; }
     .quick-guide strong { display: block; margin-bottom: 3px; color: var(--ink); }
     .quick-guide p { margin: 2px 0; }
@@ -272,6 +276,13 @@
       <span><strong>緊急避難必看｜校園防災地圖</strong><span>地震災害114年版・立即確認逃生路線與集合地點</span></span>
       <span class="map-alert-go" aria-hidden="true">→</span>
     </a>
+
+    <figure class="map-preview">
+      <a href="Evacuation%20Map.png" target="_blank" rel="noopener noreferrer" aria-label="開啟完整尺寸的校園防災地圖">
+        <img src="Evacuation%20Map.png" width="2270" height="1322" alt="臺北市立陽明高級中學校園防災地圖（地震災害），114年9月修訂" fetchpriority="high">
+      </a>
+      <figcaption>點擊地圖可開啟原始尺寸，放大查看逃生路線與集合地點。</figcaption>
+    </figure>
 
     <section class="quick-guide" aria-label="雙語使用說明">
       <strong>使用說明｜Quick Guide</strong>

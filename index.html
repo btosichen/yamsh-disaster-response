@@ -271,6 +271,19 @@
       <p>輸入教職員完整姓名，立即查看緊急應變小組、自衛消防編組與負責任務。</p>
     </header>
 
+    <section class="panel" aria-labelledby="search-label">
+      <label id="search-label" for="name-input">🔎 教職員姓名</label>
+      <div class="search-row">
+        <input id="name-input" type="search" maxlength="20" autocomplete="off" placeholder="請輸入完整姓名" aria-describedby="search-help">
+        <button id="search-button" class="search-button" type="button">查詢任務</button>
+      </div>
+      <p id="search-help" class="helper">為避免顯示過多名單，請至少輸入 2 個字；每位人員只顯示一項主要任務。</p>
+    </section>
+
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <div id="notice" class="notice" role="alert"></div>
+    <section id="results" class="results" aria-label="查詢結果"></section>
+
     <a class="map-alert" href="https://www.ymsh.tp.edu.tw/wp-content/uploads/doc/ym140/%E6%A0%A1%E5%9C%92%E9%98%B2%E7%81%BD%E5%9C%B0%E5%9C%96(%E5%9C%B0%E9%9C%87%E7%81%BD%E5%AE%B3)114%E5%B9%B4%E7%89%88.pdf" target="_blank" rel="noopener noreferrer" aria-label="開啟114年版校園防災地圖（地震災害）PDF">
       <span class="map-alert-icon" aria-hidden="true">🗺️</span>
       <span><strong>緊急避難必看｜校園防災地圖</strong><span>地震災害114年版・立即確認逃生路線與集合地點</span></span>
@@ -310,19 +323,6 @@
         <span class="go" aria-hidden="true">→</span>
       </a>
     </div>
-
-    <section class="panel" aria-labelledby="search-label">
-      <label id="search-label" for="name-input">🔎 教職員姓名</label>
-      <div class="search-row">
-        <input id="name-input" type="search" maxlength="20" autocomplete="off" placeholder="請輸入完整姓名" aria-describedby="search-help">
-        <button id="search-button" class="search-button" type="button">查詢任務</button>
-      </div>
-      <p id="search-help" class="helper">為避免顯示過多名單，請至少輸入 2 個字；每位人員只顯示一項主要任務。</p>
-    </section>
-
-    <div id="status" class="status" role="status" aria-live="polite"></div>
-    <div id="notice" class="notice" role="alert"></div>
-    <section id="results" class="results" aria-label="查詢結果"></section>
 
     <section class="teacher-guide" aria-labelledby="teacher-guide-title">
       <header class="teacher-guide-head">

@@ -150,6 +150,56 @@
             margin-top: 0;
         }
 
+        .video-card {
+            background: #fff;
+            border: 3px solid #ff7b9c;
+            border-radius: 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 20px;
+        }
+
+        .video-card h2 {
+            margin: 0 0 6px;
+            color: #d63031;
+            text-align: center;
+        }
+
+        .video-card p {
+            margin: 0 0 14px;
+            color: #636e72;
+            text-align: center;
+        }
+
+        .video-frame {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: #111;
+            border-radius: 13px;
+        }
+
+        .video-frame iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .video-link {
+            display: block;
+            width: fit-content;
+            margin: 12px auto 0;
+            color: #2471a3;
+            font-weight: bold;
+            text-underline-offset: 3px;
+        }
+
+        .video-link:hover {
+            color: #d63031;
+        }
+
         /* 16:9 計算圖卡樣式 */
         .card-16-9 {
             aspect-ratio: 16 / 9;
@@ -332,6 +382,20 @@
 </nav>
 
 <div class="container">
+
+    <section class="video-card" aria-labelledby="fire-video-title">
+        <h2 id="fire-video-title">🎬 校園火災應變與自衛消防宣導</h2>
+        <p>認識火警通報、避難引導、自衛消防編組與滅火器操作。</p>
+        <div class="video-frame">
+            <iframe
+                src="https://www.youtube-nocookie.com/embed/I0aVdi4TGY0"
+                title="校園火災應變與自衛消防宣導影片"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
+        </div>
+        <a class="video-link" href="https://youtu.be/I0aVdi4TGY0" target="_blank" rel="noopener noreferrer">無法播放時，請前往 YouTube 觀看 ↗</a>
+    </section>
 
     <!-- 1. 消防常識與預防區塊 -->
     <div id="knowledge" class="section active">

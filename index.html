@@ -74,7 +74,7 @@
     .quick-guide strong { display: block; margin-bottom: 3px; color: var(--ink); }
     .quick-guide p { margin: 2px 0; }
     .quick-guide p[lang="en"] { color: #5e6875; }
-    .launch-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 20px; }
+    .launch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
     .drill-launch { display: grid; grid-template-columns: 82px 1fr auto; align-items: center; gap: 14px; min-width: 0; padding: 15px 16px; color: var(--ink); background: linear-gradient(135deg, #fff 0 68%, #bcefff 68%); border: var(--line); border-radius: 20px; box-shadow: var(--shadow); text-decoration: none; transition: transform .15s, box-shadow .15s; }
     .drill-launch:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--ink); }
     .drill-launch svg, .drill-launch > img { width: 76px; height: 76px; object-fit: contain; filter: drop-shadow(3px 4px 0 var(--ink)); }
@@ -84,6 +84,9 @@
     .fire-launch { background: linear-gradient(135deg, #fff 0 68%, #ffe39a 68%); }
     .fire-launch strong { color: #b22b1f; }
     .fire-launch .go { background: var(--orange); }
+    .tutorial-launch { background: linear-gradient(135deg, #fff 0 68%, #ffd0d7 68%); }
+    .tutorial-launch strong { color: #b11f35; }
+    .tutorial-launch .go { background: var(--red); }
     .panel { margin-top: 26px; padding: clamp(20px, 4vw, 30px); background: white; }
     .panel label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 1.08rem; }
     .search-row { display: flex; gap: 12px; }
@@ -237,6 +240,10 @@
     .legal-basis a:hover { color: var(--red); }
     footer { margin-top: 34px; text-align: center; color: #69717b; font-size: .82rem; }
     .design-credit { margin-top: 5px; color: #4d5661; font-weight: 750; }
+    @media (max-width: 860px) {
+      .launch-grid { grid-template-columns: repeat(2, 1fr); }
+      .fire-launch { grid-column: 1 / -1; }
+    }
     @media (max-width: 620px) {
       .shell { width: min(100% - 20px, 900px); padding-top: 12px; }
       .hero, .panel, .result-card, .notice, .teacher-guide, .mission-handbook, .video-card, .map-resource { border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); }
@@ -248,6 +255,7 @@
       .command-grid, .team-grid { grid-template-columns: 1fr; }
       .command-card.commander { transform: none; }
       .launch-grid { grid-template-columns: 1fr; }
+      .fire-launch { grid-column: auto; }
       .drill-launch { grid-template-columns: 70px 1fr; }
       .drill-launch svg, .drill-launch > img { width: 65px; height: 65px; }
       .drill-launch .go { display: none; }
@@ -301,6 +309,12 @@
         </svg>
         <span><strong>🎬 防災演練互動腳本</strong><span>依時間與角色查看行動、逐步勾選演練進度。</span></span>
         <span class="go" aria-hidden="true">→</span>
+      </a>
+
+      <a class="drill-launch tutorial-launch" href="https://youtu.be/cA1ioFw4Qb8" target="_blank" rel="noopener noreferrer" aria-label="在 YouTube 新分頁觀看滅火器操作入門">
+        <img src="extinguisher-tutorial-icon.png" alt="" aria-hidden="true" width="76" height="76">
+        <span><strong>🧯 滅火器操作入門</strong><span>拉、瞄、壓、掃；先通報並確認安全退路。</span></span>
+        <span class="go" aria-hidden="true">↗</span>
       </a>
 
       <a class="drill-launch fire-launch" href="FireSafety.html" aria-label="開啟自衛消防編組與消防常識說明">

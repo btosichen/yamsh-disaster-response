@@ -44,7 +44,7 @@ const Cloud={url:localStorage.getItem('ymhs-safety-gas-url')||CLOUD_DEFAULT_URL,
    const incoming=new Map(data.points.map(p=>[p.id,p]));
    points=points.filter(p=>incoming.has(p.id)||(!p.publicOnly&&!p.version&&!this.knownSharedIds.has(p.id)));
    const current=new Map(points.map(p=>[p.id,p]));
-   for(const p of data.points){const existing=current.get(p.id);if(!existing)points.push(p);else if(existing.publicOnly)Object.assign(existing,p);this.knownSharedIds.add(p.id);}
+   for(const p of data.points){const existing=current.get(p.id);if(!existing)points.push(p);else if(existing.publicOnly)Object.assign(existing,p);else if(Number(existing.version||0)!==p.version){for(const key of Object.keys(existing))delete existing[key];Object.assign(existing,p);}this.knownSharedIds.add(p.id);}
    this.revision=data.revision;selected=points.some(p=>p.id===selected)?selected:undefined;this.persist();renderAll();this.status(`共用圖釘已更新（${data.points.length} 枚）；新增後請確認同步完成`);
   }catch(e){this.status('暫時無法更新共用圖釘：'+e.message);}
   finally{this.loadingPublic=false;}

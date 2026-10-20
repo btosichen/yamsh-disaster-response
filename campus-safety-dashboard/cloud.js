@@ -35,7 +35,30 @@ const Cloud={url:localStorage.getItem('ymhs-safety-gas-url')||CLOUD_DEFAULT_URL,
   finally{this.busy=false;}
  },
  async refresh(){document.querySelector('#cloudConnect').click();},
- async remove(id,password){if(this.busy||Object.keys(this.pending).length)throw Error('請先完成未同步資料，再執行刪除。');const point=points.find(p=>p.id===id);const r=await this.api(id?'delete':'clear',{id,password,expectedVersion:point?.version,expectedRevision:this.revision});this.revision=r.revision;points=points.filter(p=>!r.deleted.includes(p.id));selected=points[0]?.id;this.persist();renderAll();this.status('刪除完成，紀錄已保留於試算表');},
+ forgetDeleted(ids){
+  const removed=new Set(ids);points=points.filter(p=>!removed.has(p.id));
+  // Remove matching legacy local copies too, so a page reload cannot resurrect a pin.
+  const local=JSON.parse(localStorage.getItem(storageKey)||'[]');
+  localStorage.setItem(storageKey,JSON.stringify(local.filter(p=>!removed.has(p.id))));
+  selected=points.some(p=>p.id===selected)?selected:points[0]?.id;this.persist();renderAll();
+ },
+ async remove(id,password){
+  if(this.busy||Object.keys(this.pending).length)throw Error('請先完成未同步資料，再執行刪除。');
+  const localPoint=points.find(p=>p.id===id),localIds=points.map(p=>p.id),previousRevision=this.revision;
+  // The password authorizes this read; never use a stale local version for deletion.
+  const latest=await this.api('list',{password});this.revision=latest.revision;
+  const current=latest.points.find(p=>p.id===id);
+  if(id&&!current){this.forgetDeleted([id]);this.status('共用資料已無此圖釘，已移除本機舊圖釘');return;}
+  if(id&&Number(localPoint?.version||0)!==current.version){
+   if(localPoint)Object.assign(localPoint,current);this.persist();renderAll();
+   if(!confirm(`這枚圖釘有較新的紀錄：${current.title}\n更新時間：${current.updatedAt||'未提供'}\n是否刪除這枚圖釘的最新版本及改善紀錄？`))throw Error('已載入這枚圖釘的最新紀錄，取消刪除。');
+  }
+  if(!id&&previousRevision!==latest.revision&&!confirm(`共用資料已有更新，目前共有 ${latest.points.length} 枚圖釘。確定清除所有圖釘及其改善紀錄嗎？`))throw Error('共用資料已有更新，已取消清除。');
+  try{
+   const r=await this.api(id?'delete':'clear',{id,password,expectedVersion:current?.version,expectedRevision:latest.revision});this.revision=r.revision;
+   this.forgetDeleted(id?[id]:[...localIds,...r.deleted]);this.status('刪除完成，紀錄已保留於試算表');
+  }catch(e){if(e.code==='CONFLICT')throw Error('確認期間資料再次更新，尚未刪除。請再按「驗證並刪除」，系統會重新取得最新紀錄。');throw e;}
+ },
  async importLocal(){if(this.busy||Object.keys(this.pending).length)throw Error('請先完成同步。');const local=JSON.parse(localStorage.getItem(storageKey)||'[]');if(!local.length){alert('這台裝置沒有可匯入的本機圖釘。');return;}if(!confirm(`將這台裝置的 ${local.length} 枚圖釘新增到共用試算表？原本機資料會保留。重複匯入會產生重複圖釘。`))return;local.forEach(p=>{const copy={...p,id:'import-'+crypto.randomUUID(),version:0,syncRequestId:crypto.randomUUID()};points.push(copy);this.pending[copy.id]=copy;});this.persist();renderAll();await this.flush();},
  backup(){const payload={savedAt:new Date().toISOString(),points,pending:this.pending};const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='校園安全圖釘備份.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 };

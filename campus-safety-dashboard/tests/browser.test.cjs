@@ -4,8 +4,8 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict'),path
  await page.route('https://local.test/**',r=>r.fulfill({path:path.join(__dirname,'..',new URL(r.request().url()).pathname.replace('/campus-safety-dashboard/',''))}));
  let offline=false;
  await page.route('https://script.google.com/macros/s/**/exec',r=>{const body=JSON.parse(r.request().postData());requests.push(body);return offline?r.abort():r.fulfill({contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify(db.post(body))});});
- await page.goto('https://local.test/campus-safety-dashboard/index.html');assert.equal(requests.length,0);
- await page.click('#addPin');await page.locator('#mapStage').click({position:{x:120,y:120}});await page.waitForFunction(()=>!Cloud.busy&&Object.keys(Cloud.pending).length===0);assert.equal(requests[0].action,'upsert');assert.equal(requests[0].password,undefined);
+ await page.goto('https://local.test/campus-safety-dashboard/index.html');await page.waitForFunction(()=>!Cloud.loadingPublic);assert.ok(requests.every(r=>r.action==='publicList'));
+ await page.click('#addPin');await page.locator('#mapStage').click({position:{x:120,y:120}});await page.waitForFunction(()=>!Cloud.busy&&Object.keys(Cloud.pending).length===0);assert.ok(requests.some(r=>r.action==='upsert'));assert.equal(requests.find(r=>r.action==='upsert').password,undefined);
  await page.fill('#recordProposer','測試人員');await page.fill('#recordReason','直接儲存，不輸入密碼');await page.click('.save-record');await page.waitForFunction(()=>!Cloud.busy&&Object.keys(Cloud.pending).length===0);
  const read=()=>db.post({action:'list',password:'test-password-for-suite'});assert.equal(read().points[0].reason,'直接儲存，不輸入密碼');
  await page.click('#cloudConnect');await page.fill('#cloudPassword','wrong');await page.click('#cloudForm [type=submit]');await page.waitForFunction(()=>document.querySelector('#cloudError').textContent.includes('不正確'));await page.fill('#cloudPassword','test-password-for-suite');await page.click('#cloudForm [type=submit]');await page.waitForFunction(()=>!document.querySelector('#cloudDialog').open);

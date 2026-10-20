@@ -82,6 +82,7 @@ function normalize_(raw){
   p.x=Number(raw.x);p.y=Number(raw.y);if(!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.x>100||p.y<0||p.y>100)fail_('INVALID','圖釘座標不正確。');
   p.status=['red','amber','green'].includes(raw.status)?raw.status:'amber';p.custom=true;p.alert=Boolean(raw.alert);return p;
 }
+function publicPoint_(p){return {id:p.id,layer:p.layer,x:p.x,y:p.y,status:p.status,version:p.version,updatedAt:p.updatedAt,alert:Boolean(p.alert),custom:true,publicOnly:true,title:'校園安全圖釘'};}
 function doGet(){return json_({ok:true,service:'ymhs-campus-safety',version:2,message:'請由校園安全網站登入；本入口不提供公開資料。'});}
 function doPost(e){
   let lock;
@@ -89,9 +90,10 @@ function doPost(e){
     const text=e&&e.postData&&e.postData.contents||'';if(text.length>60000)fail_('INVALID','資料過大。');
     const req=JSON.parse(text),cache=CacheService.getScriptCache();
     // Writes are intentionally public; reading and deletion require a fresh password.
-    if(!['list','upsert','delete','clear'].includes(req.action))fail_('INVALID','不支援的操作。');
+    if(!['publicList','list','upsert','delete','clear'].includes(req.action))fail_('INVALID','不支援的操作。');
     lock=LockService.getScriptLock();if(!lock.tryLock(15000))fail_('BUSY','其他人正在儲存，請稍後重試。');
     const ss=table_(),rows=readRows_(ss);
+    if(req.action==='publicList')return json_({ok:true,points:rows.map(r=>r.point).filter(p=>!p.deletedAt).map(publicPoint_),revision:revision_(ss)});
     if(req.action==='list'){checkReadPassword_(req.password,cache);return json_({ok:true,points:rows.map(r=>r.point).filter(p=>!p.deletedAt),revision:revision_(ss)});}
     if(req.action==='upsert'){
       const p=normalize_(req.point),found=rows.find(r=>r.point.id===p.id),version=found?found.point.version:0;

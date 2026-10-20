@@ -1,9 +1,9 @@
-/* Save directly; every shared-data read and deletion requires the password. */
+/* Shared markers are public; full records and deletion require the password. */
 const CLOUD_DEFAULT_URL='https://script.google.com/macros/s/AKfycbxZFerWiAtXAOqol8-NsqKDtTnDoLE_fdBkSmmw4v6q6HQkZK-OuU5OlUnTL7H_WiQtUg/exec';
-const Cloud={url:localStorage.getItem('ymhs-safety-gas-url')||CLOUD_DEFAULT_URL,token:sessionStorage.getItem('ymhs-safety-session')||'',connected:true,revision:0,pending:{},busy:false,paused:false,
+const Cloud={url:localStorage.getItem('ymhs-safety-gas-url')||CLOUD_DEFAULT_URL,token:sessionStorage.getItem('ymhs-safety-session')||'',connected:true,revision:0,pending:{},busy:false,paused:false,loadingPublic:false,formDirty:false,readSelection:null,knownSharedIds:new Set(),
  key(){return 'ymhs-safety-cloud:'+this.url;},
  status(text){document.querySelector('#cloudStatus').textContent=text;},
- persist(){localStorage.setItem(this.key(),JSON.stringify({points,pending:this.pending}));},
+ persist(){localStorage.setItem(this.key(),JSON.stringify({points,pending:this.pending,knownSharedIds:[...this.knownSharedIds]}));},
  async api(action,data={}){
   if(!this.url)throw Error('請先設定共用試算表連線。');
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),30000);
@@ -20,11 +20,11 @@ const Cloud={url:localStorage.getItem('ymhs-safety-gas-url')||CLOUD_DEFAULT_URL,
    if(Object.keys(this.pending).length){if(!confirm('尚有未同步或衝突的資料。是否下載備份後，改為載入共用資料？'))return;this.backup();}this.pending={};
    points=data.points;
    Object.entries(this.pending).forEach(([id,p])=>{const index=points.findIndex(x=>x.id===id);if(index<0)points.push(p);else points[index]=p;});
-   selected=points[0]?.id;localStorage.setItem('ymhs-safety-gas-url',url);sessionStorage.removeItem('ymhs-safety-session');this.persist();this.showControls();renderAll();this.status('已驗證密碼並讀取共用資料；儲存不需密碼');if(Object.keys(this.pending).length)this.flush();
+   selected=points.some(p=>p.id===this.readSelection)?this.readSelection:points[0]?.id;this.readSelection=null;points.forEach(p=>this.knownSharedIds.add(p.id));localStorage.setItem('ymhs-safety-gas-url',url);sessionStorage.removeItem('ymhs-safety-session');this.persist();this.showControls();renderAll();this.status('已驗證密碼並讀取共用資料；儲存不需密碼');if(Object.keys(this.pending).length)this.flush();
   }catch(e){this.url=oldUrl;this.token=oldToken;throw e;}
  },
- showControls(){document.querySelector('#cloudRefresh').hidden=true;document.querySelector('#cloudRetry').hidden=!this.connected;document.querySelector('#cloudImport').hidden=!this.connected;document.querySelector('#cloudBackup').hidden=!this.connected;document.querySelector('#cloudConnect').textContent='讀取共用資料（需密碼）';document.querySelector('#mapStorageNote').textContent=this.connected?'新增與儲存直接同步試算表；讀取共用資料、刪除及清除需管理密碼。':'圖釘暫存於這台裝置；連接共用試算表後可跨裝置存取。';},
- save(point){if(!this.connected)return;if(!point){this.status('未同步：缺少指定圖釘。');return;}const prior=this.pending[point.id];this.pending[point.id]={...point,version:prior?prior.version:point.version||0,syncRequestId:crypto.randomUUID()};this.persist();this.status('正在同步…');if(!this.paused)this.flush();},
+ showControls(){document.querySelector('#cloudRefresh').hidden=false;document.querySelector('#cloudRetry').hidden=!this.connected;document.querySelector('#cloudImport').hidden=!this.connected;document.querySelector('#cloudBackup').hidden=!this.connected;document.querySelector('#cloudConnect').textContent='完整改善紀錄（需密碼）';document.querySelector('#mapStorageNote').textContent=this.connected?'共用圖釘自動顯示，約每30秒更新；完整紀錄與刪除仍需管理密碼。':'圖釘暫存於這台裝置；連接共用試算表後可跨裝置存取。';},
+ save(point){this.formDirty=false;if(!this.connected)return;if(!point){this.status('未同步：缺少指定圖釘。');return;}const prior=this.pending[point.id];this.pending[point.id]={...point,version:prior?prior.version:point.version||0,syncRequestId:crypto.randomUUID()};this.persist();this.status('正在同步…');if(!this.paused)this.flush();},
  async flush(){
   if(this.busy)return;this.busy=true;this.paused=false;
   try{while(Object.keys(this.pending).length){const id=Object.keys(this.pending)[0],snapshot=this.pending[id],encoded=JSON.stringify(snapshot);const result=await this.api('upsert',{point:snapshot,expectedVersion:snapshot.version||0,requestId:snapshot.syncRequestId});this.revision=result.revision;
@@ -34,7 +34,21 @@ const Cloud={url:localStorage.getItem('ymhs-safety-gas-url')||CLOUD_DEFAULT_URL,
   }catch(e){this.paused=true;this.status('未同步：'+e.message);this.persist();}
   finally{this.busy=false;}
  },
- async refresh(){document.querySelector('#cloudConnect').click();},
+ async refresh(){return this.refreshPublic(true);},
+ async refreshPublic(manual=false){
+  if(this.loadingPublic||this.busy||Object.keys(this.pending).length||this.formDirty||dragging||addMode||editMode||document.querySelector('dialog[open]')){if(manual)this.status('請先完成目前的編輯或同步，再更新共用圖釘。');return;}
+  this.loadingPublic=true;
+  try{
+   const data=await this.api('publicList');
+   if(this.busy||Object.keys(this.pending).length||this.formDirty||dragging||addMode||editMode||document.querySelector('dialog[open]'))return;
+   const incoming=new Map(data.points.map(p=>[p.id,p]));
+   points=points.filter(p=>incoming.has(p.id)||(!p.publicOnly&&!p.version&&!this.knownSharedIds.has(p.id)));
+   const current=new Map(points.map(p=>[p.id,p]));
+   for(const p of data.points){const existing=current.get(p.id);if(!existing)points.push(p);else if(existing.publicOnly)Object.assign(existing,p);this.knownSharedIds.add(p.id);}
+   this.revision=data.revision;selected=points.some(p=>p.id===selected)?selected:undefined;this.persist();renderAll();this.status(`共用圖釘已更新（${data.points.length} 枚）；新增後請確認同步完成`);
+  }catch(e){this.status('暫時無法更新共用圖釘：'+e.message);}
+  finally{this.loadingPublic=false;}
+ },
  forgetDeleted(ids){
   const removed=new Set(ids);points=points.filter(p=>!removed.has(p.id));
   // Remove matching legacy local copies too, so a page reload cannot resurrect a pin.
@@ -67,10 +81,15 @@ document.querySelector('#cloudForm').onsubmit=async event=>{event.preventDefault
 document.querySelector('#cloudRefresh').onclick=()=>Cloud.refresh().catch(e=>Cloud.status(e.message));
 document.querySelector('#cloudRetry').onclick=()=>Cloud.flush();document.querySelector('#cloudImport').onclick=()=>Cloud.importLocal().catch(e=>Cloud.status(e.message));document.querySelector('#cloudBackup').onclick=()=>Cloud.backup();
 Cloud.showControls();
-// Do not automatically read protected records on page load, even with an old session.
+// Only the redacted marker projection is loaded without a password.
+
 sessionStorage.removeItem('ymhs-safety-session');
 const pendingDraft=JSON.parse(localStorage.getItem(Cloud.key())||'null');
-Cloud.pending=pendingDraft?.pending||{};
+Cloud.pending=pendingDraft?.pending||{};Cloud.knownSharedIds=new Set(pendingDraft?.knownSharedIds||[]);
 Object.values(Cloud.pending).forEach(p=>{const i=points.findIndex(x=>x.id===p.id);if(i<0)points.push(p);else points[i]=p;});
-Cloud.status('可直接儲存；讀取共用資料時請輸入密碼');
-if(Object.keys(Cloud.pending).length){renderAll();Cloud.flush();}
+Cloud.status('正在載入共用圖釘…');
+if(Object.keys(Cloud.pending).length){renderAll();Cloud.flush().then(()=>Cloud.refreshPublic());}else Cloud.refreshPublic();
+setInterval(()=>{if(!document.hidden)Cloud.refreshPublic();},30000);
+window.addEventListener('focus',()=>Cloud.refreshPublic());
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)Cloud.refreshPublic();});
+document.addEventListener('input',event=>{if(event.target.closest('#pinRecordForm'))Cloud.formDirty=true;});

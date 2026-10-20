@@ -31,4 +31,9 @@ test('one-time connector seed migrates to private properties and removes the sta
  b.tables.set('_管理密碼初始化',{name:'_管理密碼初始化',getRange:()=>({getValues:()=>[['PASSWORD_SALT',salt],['PASSWORD_HASH',hash]]})});
  assert.equal(b.post({action:'list',password}).ok,true);assert.equal(b.props.get('PASSWORD_HASH'),hash);assert.equal(b.tables.has('_管理密碼初始化'),false);assert.equal(b.post({action:'list',password:'wrong'}).code,'PASSWORD');
 });
+test('shared markers are public but private record fields never leave the authenticated endpoint',()=>{
+ const b=backend();b.post({action:'upsert',point:{...point,title:'private-title',proposer:'private-name',contact:'private-phone',reason:'private-reason',note:'private-note',action:'private-action'},expectedVersion:0,requestId:'public-test'});
+ const r=b.post({action:'publicList'});assert.equal(r.ok,true);assert.equal(r.points.length,1);assert.equal(r.points[0].publicOnly,true);assert.equal(r.points[0].x,20);assert.equal(r.points[0].version,1);for(const secret of ['private-title','private-name','private-phone','private-reason','private-note','private-action'])assert.ok(!JSON.stringify(r).includes(secret));assert.equal(b.post({action:'list'}).code,'PASSWORD');assert.equal(b.post({action:'delete',id:point.id,expectedVersion:1}).code,'PASSWORD');
+ b.post({action:'delete',id:point.id,expectedVersion:1,password});assert.equal(b.post({action:'publicList'}).points.length,0);
+});
 module.exports={backend};

@@ -103,6 +103,16 @@
   </main>
 
   <footer>本頁依現有消防防護計畫、防護團名冊及緊急應變小組資料製作｜圖釘位置儲存於本機瀏覽器</footer>
+  <dialog id="deleteAuthDialog" class="delete-auth" aria-labelledby="deleteAuthTitle" aria-describedby="deleteAuthMessage">
+    <form id="deleteAuthForm">
+      <h2 id="deleteAuthTitle">刪除圖釘確認</h2>
+      <p id="deleteAuthMessage"></p>
+      <label for="deleteAuthPassword">管理密碼</label>
+      <input id="deleteAuthPassword" type="password" required autocomplete="off" autocapitalize="off" spellcheck="false">
+      <p id="deleteAuthError" role="alert"></p>
+      <div class="delete-auth-actions"><button type="button" onclick="this.closest('dialog').close()">取消</button><button type="submit">驗證並刪除</button></div>
+    </form>
+  </dialog>
   <script src="app.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@ const {test}=require('node:test'),assert=require('node:assert/strict'),vm=requir
 function backend(){
  const tables=new Map(),props=new Map(),cache=new Map();let userEmail='btosichen@gmail.com';
  class Sheet{constructor(name){this.rows=[];this.name=name;}getLastRow(){return this.rows.length;}getRange(r,c,n=1,m=1){return {getValues:()=>Array.from({length:n},(_,i)=>Array.from({length:m},(_,j)=>this.rows[r-1+i]?.[c-1+j]??'')),setValues:values=>{values.forEach((v,i)=>{this.rows[r-1+i]??=[];v.forEach((x,j)=>this.rows[r-1+i][c-1+j]=x);});return this.getRange(r,c,n,m);},setBackground(){return this;},setFontColor(){return this;},setFontWeight(){return this;}};}appendRow(row){this.rows.push(row);}setFrozenRows(){}setColumnWidths(){}setColumnWidth(){}}
- const ss={getId:()=> '1kBAX215x-DrpNr9UYQLfTS2lmf_nVUK2c13gKuN5Jsc',getSheetByName:n=>tables.get(n),insertSheet:n=>{const s=new Sheet(n);tables.set(n,s);return s;}};
+ const ss={getId:()=> '1kBAX215x-DrpNr9UYQLfTS2lmf_nVUK2c13gKuN5Jsc',getSheetByName:n=>tables.get(n),deleteSheet:sheet=>tables.delete(sheet.name),insertSheet:n=>{const s=new Sheet(n);tables.set(n,s);return s;}};
  const ui={ButtonSet:{OK_CANCEL:1},Button:{OK:1},prompt:()=>({getSelectedButton:()=>1,getResponseText:()=> 'test-password-for-suite'}),alert(){}};
  const ctx={console,Session:{getActiveUser:()=>({getEmail:()=>userEmail})},SpreadsheetApp:{getActiveSpreadsheet:()=>ss,openById:()=>ss,getUi:()=>ui,flush(){}},PropertiesService:{getScriptProperties:()=>({getProperty:k=>props.get(k)||null,setProperty:(k,v)=>props.set(k,v),setProperties:o=>Object.entries(o).forEach(([k,v])=>props.set(k,v))})},CacheService:{getScriptCache:()=>({get:k=>cache.get(k)||null,put:(k,v)=>cache.set(k,v),remove:k=>cache.delete(k)})},Utilities:{getUuid:()=>crypto.randomUUID(),DigestAlgorithm:{SHA_256:1},Charset:{UTF_8:1},computeDigest:(_,s)=>[...crypto.createHash('sha256').update(s).digest()]},LockService:{getScriptLock:()=>({tryLock:()=>true,releaseLock(){}})},ContentService:{MimeType:{JSON:1},createTextOutput:text=>({setMimeType:()=>text})}};
  vm.createContext(ctx);vm.runInContext(fs.readFileSync(__dirname+'/../gas/Code.gs','utf8'),ctx);ctx.install();const post=data=>JSON.parse(ctx.doPost({postData:{contents:JSON.stringify(data)}}));return {post,tables,props,setUser:email=>{userEmail=email;},configure:ctx.saveAdminPassword};
@@ -25,5 +25,10 @@ test('rejects invalid coordinates and prevents sheet formulas',()=>{const b=back
 test('only the spreadsheet manager can configure a password; stores only a salted hash',()=>{
  const b=backend(),previous=b.props.get('PASSWORD_HASH');b.setUser('someone@example.com');assert.throws(()=>b.configure('replacement-test-password'));assert.equal(b.props.get('PASSWORD_HASH'),previous);
  b.setUser('btosichen@gmail.com');assert.throws(()=>b.configure('short'));b.configure('replacement-test-password');assert.notEqual(b.props.get('PASSWORD_HASH'),previous);assert.ok(!JSON.stringify([...b.props]).includes('replacement-test-password'));assert.equal(b.post({action:'list',password:'replacement-test-password'}).ok,true);assert.equal(b.post({action:'list',password}).code,'PASSWORD');
+});
+test('one-time connector seed migrates to private properties and removes the staging sheet',()=>{
+ const b=backend();b.props.delete('PASSWORD_HASH');b.props.delete('PASSWORD_SALT');const salt=crypto.randomBytes(32).toString('hex'),hash=crypto.createHash('sha256').update(salt+'\n'+password).digest('hex');
+ b.tables.set('_管理密碼初始化',{name:'_管理密碼初始化',getRange:()=>({getValues:()=>[['PASSWORD_SALT',salt],['PASSWORD_HASH',hash]]})});
+ assert.equal(b.post({action:'list',password}).ok,true);assert.equal(b.props.get('PASSWORD_HASH'),hash);assert.equal(b.tables.has('_管理密碼初始化'),false);assert.equal(b.post({action:'list',password:'wrong'}).code,'PASSWORD');
 });
 module.exports={backend};

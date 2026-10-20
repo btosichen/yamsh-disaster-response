@@ -46,7 +46,17 @@ function install() {
   SpreadsheetApp.getUi().alert('初始化完成。請部署為網頁應用程式：執行身分為我，存取權為任何人。資料仍需管理密碼登入才能讀取。');
 }
 function passwordHash_(salt,password) { return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,salt+'\n'+password,Utilities.Charset.UTF_8).map(n=>('0'+((n+256)%256).toString(16)).slice(-2)).join(''); }
+// One-time bootstrap through the authenticated Sheets connector; no plaintext credential.
+function ensurePasswordConfiguration_(){
+  const props=PropertiesService.getScriptProperties();if(props.getProperty('PASSWORD_HASH')&&props.getProperty('PASSWORD_SALT'))return;
+  const ss=table_(),seed=ss.getSheetByName('_管理密碼初始化');if(!seed)return;
+  const values=seed.getRange(1,1,2,2).getValues();
+  if(values[0][0]!=='PASSWORD_SALT'||values[1][0]!=='PASSWORD_HASH'||!/^[a-f0-9]{64}$/.test(values[0][1])||!/^[a-f0-9]{64}$/.test(values[1][1]))throw new Error('管理密碼初始化資料不正確。');
+  props.setProperties({PASSWORD_SALT:values[0][1],PASSWORD_HASH:values[1][1]});
+  ss.deleteSheet(seed);
+}
 function checkPassword_(password) {
+  ensurePasswordConfiguration_();
   const props=PropertiesService.getScriptProperties(),salt=props.getProperty('PASSWORD_SALT'),expected=props.getProperty('PASSWORD_HASH');
   if (!salt || !expected) fail_('NOT_INSTALLED','請先執行 install 初始化。');
   const actual=passwordHash_(salt,String(password||''));

@@ -8,18 +8,18 @@ function backend(){
  vm.createContext(ctx);vm.runInContext(fs.readFileSync(__dirname+'/../gas/Code.gs','utf8'),ctx);ctx.install();const post=data=>JSON.parse(ctx.doPost({postData:{contents:JSON.stringify(data)}}));return {post,tables,props};
 }
 const point={id:'custom-test',layer:'space',title:'測試',x:20,y:30,status:'amber',reason:'問題'};
-test('requires login for reads and writes; no plaintext password persisted',()=>{const b=backend();assert.equal(b.post({action:'list'}).code,'AUTH');assert.equal(b.post({action:'upsert',point}).code,'AUTH');assert.equal(b.post({action:'login',password:'wrong'}).code,'PASSWORD');assert.ok(!JSON.stringify([...b.props]).includes('test-password-for-suite'));});
-test('incremental updates, stale write rejection, password deletion and tombstones',()=>{const b=backend(),token=b.post({action:'login',password:'test-password-for-suite'}).token;const call=(action,data={})=>b.post({action,token,...data});
- let r=call('upsert',{point,expectedVersion:0,requestId:'one'});assert.equal(r.point.version,1);
- r=call('upsert',{point,expectedVersion:0,requestId:'one'});assert.equal(r.point.version,1);assert.equal(b.tables.get('操作紀錄').rows.length,2);
+const password='test-password-for-suite';
+test('saving is public while every read needs the password',()=>{const b=backend();assert.equal(b.post({action:'list'}).code,'PASSWORD');assert.equal(b.post({action:'list',password:'wrong'}).code,'PASSWORD');assert.equal(b.post({action:'upsert',point,expectedVersion:0,requestId:'new'}).ok,true);assert.equal(b.post({action:'list',password}).points.length,1);assert.equal(b.post({action:'list'}).code,'PASSWORD');assert.ok(!JSON.stringify([...b.props]).includes(password));});
+test('receipts do not leak records; stale writes and unauthorized deletes are rejected',()=>{const b=backend(),call=(action,data={})=>b.post({action,...data});
+ let r=call('upsert',{point,expectedVersion:0,requestId:'one'});assert.equal(r.receipt.version,1);assert.equal(r.point,undefined);assert.equal(r.receipt.reason,undefined);
+ r=call('upsert',{point,expectedVersion:0,requestId:'one'});assert.equal(r.receipt.version,1);assert.equal(b.tables.get('操作紀錄').rows.length,2);
  assert.equal(call('upsert',{point,expectedVersion:0,requestId:'two'}).code,'CONFLICT');
- call('upsert',{point:{...point,id:'second'},expectedVersion:0,requestId:'second'});assert.equal(call('list').points.length,2);
- assert.equal(call('delete',{id:point.id,expectedVersion:1,password:'wrong'}).code,'PASSWORD');assert.equal(call('list').points.length,2);
- assert.equal(call('delete',{id:point.id,expectedVersion:1,password:'test-password-for-suite'}).ok,true);assert.equal(call('list').points.length,1);
+ call('upsert',{point:{...point,id:'second'},expectedVersion:0,requestId:'second'});assert.equal(call('list',{password}).points.length,2);
+ assert.equal(call('delete',{id:point.id,expectedVersion:1,password:'wrong'}).code,'PASSWORD');assert.equal(call('list',{password}).points.length,2);
+ assert.equal(call('delete',{id:point.id,expectedVersion:1,password}).ok,true);assert.equal(call('list',{password}).points.length,1);
  assert.equal(call('upsert',{point,expectedVersion:0,requestId:'one'}).code,'DELETED');
- const rev=call('list').revision;assert.equal(call('clear',{password:'test-password-for-suite',expectedRevision:rev-1}).code,'CONFLICT');
- assert.equal(call('clear',{password:'test-password-for-suite',expectedRevision:rev}).ok,true);assert.equal(call('list').points.length,0);assert.equal(b.tables.get('校園安全圖釘').rows.length,3);
+ const rev=call('list',{password}).revision;assert.equal(call('clear',{password,expectedRevision:rev-1}).code,'CONFLICT');
+ assert.equal(call('clear',{password,expectedRevision:rev}).ok,true);assert.equal(call('list',{password}).points.length,0);assert.equal(b.tables.get('校園安全圖釘').rows.length,3);
 });
-test('rejects invalid coordinates and prevents sheet formulas',()=>{const b=backend(),token=b.post({action:'login',password:'test-password-for-suite'}).token;assert.equal(b.post({action:'upsert',token,point:{...point,x:101},expectedVersion:0}).code,'INVALID');b.post({action:'upsert',token,point:{...point,title:'=IMPORTXML("https://example.com")'},expectedVersion:0});assert.match(b.tables.get('校園安全圖釘').rows[1][4],/^'=/);});
-
+test('rejects invalid coordinates and prevents sheet formulas',()=>{const b=backend();assert.equal(b.post({action:'upsert',point:{...point,x:101},expectedVersion:0}).code,'INVALID');b.post({action:'upsert',point:{...point,title:'=IMPORTXML("https://example.com")'},expectedVersion:0});assert.match(b.tables.get('校園安全圖釘').rows[1][4],/^'=/);});
 module.exports={backend};

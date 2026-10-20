@@ -30,8 +30,8 @@
     </section>
 
     <section class="cloud-bar" aria-label="共用儲存">
-      <div><b>共用試算表儲存</b><p id="cloudStatus" role="status">尚未連接，目前儲存於本機</p></div>
-      <div class="cloud-buttons"><button id="cloudConnect">連接共用試算表</button><button id="cloudRefresh" hidden>載入最新資料</button><button id="cloudRetry" hidden>重試同步</button><button id="cloudImport" hidden>匯入原本機圖釘</button><button id="cloudBackup" hidden>下載備份</button></div>
+      <div><b>共用試算表儲存</b><p id="cloudStatus" role="status">可直接儲存；讀取共用資料需密碼</p></div>
+      <div class="cloud-buttons"><button id="cloudConnect">讀取共用資料（需密碼）</button><button id="cloudRefresh" hidden>載入最新資料</button><button id="cloudRetry" hidden>重試同步</button><button id="cloudImport" hidden>匯入原本機圖釘</button><button id="cloudBackup" hidden>下載備份</button></div>
     </section>
     <section class="workspace">
       <aside class="panel filters">
@@ -119,11 +119,11 @@
     </form>
   </dialog>
   <dialog id="cloudDialog" class="delete-auth" aria-labelledby="cloudTitle">
-    <form id="cloudForm"><h2 id="cloudTitle">連接共用試算表</h2>
-      <p>首次連接會載入共用資料，原本機圖釘會保留，可再按「匯入原本機圖釘」。</p>
+    <form id="cloudForm"><h2 id="cloudTitle">讀取共用資料</h2>
+      <p>儲存不需密碼。輸入管理密碼後才會讀取共用圖釘；原本機圖釘會保留。</p>
       <label for="cloudUrl">共用儲存連線網址</label><input id="cloudUrl" type="url" required placeholder="https://script.google.com/macros/s/…/exec">
       <label for="cloudPassword">管理密碼</label><input id="cloudPassword" type="password" required autocomplete="off">
-      <p id="cloudError" role="alert"></p><div class="delete-auth-actions"><button type="button" onclick="this.closest('dialog').close();document.querySelector('#cloudPassword').value=''">取消</button><button type="submit">連接並載入</button></div>
+      <p id="cloudError" role="alert"></p><div class="delete-auth-actions"><button type="button" onclick="this.closest('dialog').close();document.querySelector('#cloudPassword').value=''">取消</button><button type="submit">驗證並讀取</button></div>
     </form>
   </dialog>
   <script src="app.js"></script>

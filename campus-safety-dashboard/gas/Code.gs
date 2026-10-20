@@ -37,6 +37,10 @@ function checkPassword_(password) {
   let diff=actual.length^expected.length;for(let i=0;i<expected.length;i++)diff|=actual.charCodeAt(i)^expected.charCodeAt(i);
   if(diff)fail_('PASSWORD','管理密碼不正確。');
 }
+function checkReadPassword_(password,cache){
+  if(Number(cache.get('read-failures')||0)>=30)fail_('RATE_LIMIT','嘗試過於頻繁，請稍後再試。');
+  try{checkPassword_(password);}catch(err){if(err.code==='PASSWORD')cache.put('read-failures',String(Number(cache.get('read-failures')||0)+1),300);throw err;}
+}
 function fail_(code,message){const error=new Error(message);error.code=code;throw error;}
 function table_(){const id=PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');if(!id)fail_('NOT_INSTALLED','請先初始化。');return SpreadsheetApp.openById(id);}
 function readRows_(ss){const sh=ss.getSheetByName(DATA_SHEET);if(!sh)fail_('NOT_INSTALLED','找不到圖釘工作表。');return sh.getLastRow()<2?[]:sh.getRange(2,1,sh.getLastRow()-1,HEADERS.length).getValues().map((r,i)=>({row:i+2,point:JSON.parse(r[17])}));}
@@ -52,30 +56,25 @@ function normalize_(raw){
   p.x=Number(raw.x);p.y=Number(raw.y);if(!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.x>100||p.y<0||p.y>100)fail_('INVALID','圖釘座標不正確。');
   p.status=['red','amber','green'].includes(raw.status)?raw.status:'amber';p.custom=true;p.alert=Boolean(raw.alert);return p;
 }
-function doGet(){return json_({ok:true,service:'ymhs-campus-safety',version:1,message:'請由校園安全網站登入；本入口不提供公開資料。'});}
+function doGet(){return json_({ok:true,service:'ymhs-campus-safety',version:2,message:'請由校園安全網站登入；本入口不提供公開資料。'});}
 function doPost(e){
   let lock;
   try{
     const text=e&&e.postData&&e.postData.contents||'';if(text.length>60000)fail_('INVALID','資料過大。');
     const req=JSON.parse(text),cache=CacheService.getScriptCache();
-    if(req.action==='login'){
-      if(Number(cache.get('login-failures')||0)>=30)fail_('RATE_LIMIT','嘗試過於頻繁，請稍後再試。');
-      try{checkPassword_(req.password);}catch(err){if(err.code==='PASSWORD')cache.put('login-failures',String(Number(cache.get('login-failures')||0)+1),300);throw err;}
-      const token=Utilities.getUuid()+Utilities.getUuid();cache.put('session:'+token,'1',21600);return json_({ok:true,token});
-    }
-    if(typeof req.token!=='string'||!cache.get('session:'+req.token))fail_('AUTH','登入已逾時，請重新連接共用試算表。');
+    // Writes are intentionally public; reading and deletion require a fresh password.
     if(!['list','upsert','delete','clear'].includes(req.action))fail_('INVALID','不支援的操作。');
     lock=LockService.getScriptLock();if(!lock.tryLock(15000))fail_('BUSY','其他人正在儲存，請稍後重試。');
     const ss=table_(),rows=readRows_(ss);
-    if(req.action==='list')return json_({ok:true,points:rows.map(r=>r.point).filter(p=>!p.deletedAt),revision:revision_(ss)});
+    if(req.action==='list'){checkReadPassword_(req.password,cache);return json_({ok:true,points:rows.map(r=>r.point).filter(p=>!p.deletedAt),revision:revision_(ss)});}
     if(req.action==='upsert'){
       const p=normalize_(req.point),found=rows.find(r=>r.point.id===p.id),version=found?found.point.version:0;
       if(found&&found.point.deletedAt)fail_('DELETED','此圖釘已被刪除，不可由舊資料重新建立。');
-      if(found&&req.requestId&&found.point.lastRequestId===req.requestId)return json_({ok:true,point:found.point,revision:revision_(ss)});
+      if(found&&req.requestId&&found.point.lastRequestId===req.requestId)return json_({ok:true,receipt:{id:found.point.id,version:found.point.version,updatedAt:found.point.updatedAt},revision:revision_(ss)});
       if(Number(req.expectedVersion)!==version)fail_('CONFLICT','其他人已修改這枚圖釘，請先備份本機資料，再重新載入共用資料。');
       p.version=version+1;p.updatedAt=new Date().toISOString();p.lastRequestId=String(req.requestId||'').slice(0,100);
       writePoint_(ss,found?found.row:ss.getSheetByName(DATA_SHEET).getLastRow()+1,p);audit_(ss,found?'修改':'新增',p);SpreadsheetApp.flush();
-      return json_({ok:true,point:p,revision:revision_(ss)});
+      return json_({ok:true,receipt:{id:p.id,version:p.version,updatedAt:p.updatedAt},revision:revision_(ss)});
     }
     // Deletion can only happen here after a fresh server-side password check.
     checkPassword_(req.password);

@@ -3,6 +3,22 @@ const DATA_SHEET = '校園安全圖釘';
 const AUDIT_SHEET = '操作紀錄';
 const HEADERS = ['圖釘ID','版本','狀態','圖層','名稱','X百分比','Y百分比','主責單位','管理內容','說明','提出人','聯絡方式','問題理由','改善建議','處理進度','更新時間','刪除時間','完整資料'];
 const AUDIT_HEADERS = ['時間','操作','圖釘ID','版本','內容快照'];
+function onOpen(){SpreadsheetApp.getUi().createMenu('校園安全管理').addItem('設定讀取／刪除密碼','configurePassword').addToUi();}
+function configurePassword() {
+  const ss=SpreadsheetApp.getActiveSpreadsheet();
+  if(!ss||ss.getId()!=='1kBAX215x-DrpNr9UYQLfTS2lmf_nVUK2c13gKuN5Jsc')throw new Error('請從指定試算表的 Apps Script 開啟。');
+  const html=HtmlService.createHtmlOutput(`<html lang="zh-Hant"><meta charset="utf-8"><style>body{font:16px system-ui;padding:20px;color:#17312f}input,button{box-sizing:border-box;width:100%;padding:12px;font:inherit;border:1px solid #ccd6dc;border-radius:8px;margin:8px 0}button{background:#0a7f78;color:white;cursor:pointer}p{line-height:1.6}#status{color:#a7342d}</style><h2>設定讀取與刪除密碼</h2><p>請輸入你指定的管理密碼，再按下方儲存。密碼僅以加鹽雜湊儲存在 Google 伺服器，不會放進公開網頁。</p><form id="form"><label for="password">管理密碼</label><input id="password" type="password" minlength="12" required autocomplete="new-password"><button id="save" type="submit">儲存密碼並啟用讀取、刪除</button></form><p id="status" role="status"></p><script>document.querySelector('#form').onsubmit=e=>{e.preventDefault();const input=document.querySelector('#password'),button=document.querySelector('#save');let password=input.value;input.value='';button.disabled=true;document.querySelector('#status').textContent='正在儲存…';google.script.run.withSuccessHandler(message=>{document.querySelector('#status').style.color='#0a7f78';document.querySelector('#status').textContent=message;button.textContent='設定完成';}).withFailureHandler(error=>{document.querySelector('#status').textContent=error.message;button.disabled=false;}).saveAdminPassword(password);password='';};</script></html>`).setWidth(470).setHeight(410);
+  SpreadsheetApp.getUi().showModalDialog(html,'管理密碼設定');
+}
+function saveAdminPassword(password) {
+  const ss=SpreadsheetApp.getActiveSpreadsheet();
+  if(!ss||ss.getId()!=='1kBAX215x-DrpNr9UYQLfTS2lmf_nVUK2c13gKuN5Jsc'||Session.getActiveUser().getEmail()!=='btosichen@gmail.com')throw new Error('僅限試算表管理者在設定視窗執行。');
+  if(typeof password!=='string'||password.length<12||password.length>200)throw new Error('請使用12至200字元的密碼。');
+  const salt=Utilities.getUuid()+Utilities.getUuid();
+  PropertiesService.getScriptProperties().setProperties({SPREADSHEET_ID:ss.getId(),PASSWORD_SALT:salt,PASSWORD_HASH:passwordHash_(salt,password)});
+  CacheService.getScriptCache().remove('read-failures');
+  return '密碼已儲存，現在可以回到校園安全網站讀取資料與刪除圖釘。';
+}
 function install() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   if (!ss || ss.getId() !== '1kBAX215x-DrpNr9UYQLfTS2lmf_nVUK2c13gKuN5Jsc') throw new Error('請在指定試算表的擴充功能 → Apps Script 執行。');

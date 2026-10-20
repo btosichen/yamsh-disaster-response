@@ -41,3 +41,9 @@ Google 官方部署說明： https://developers.google.com/apps-script/guides/we
 網站已預設以下部署入口，通常不需手動貼上：
 
 https://script.google.com/macros/s/AKfycbxZFerWiAtXAOqol8-NsqKDtTnDoLE_fdBkSmmw4v6q6HQkZK-OuU5OlUnTL7H_WiQtUg/exec
+
+## 管理密碼設定與網頁保護
+
+若服務顯示尚未初始化，請重新整理試算表，選「校園安全管理 → 設定讀取／刪除密碼」，在遮罩設定視窗輸入管理密碼後按「儲存密碼並啟用讀取、刪除」。只有指定管理者可儲存設定，密碼以加鹽雜湊保存在指令碼屬性。設定成功後無須重新部署，即可使用原服務網址。
+
+公開 HTML 已移除縮排，前端不再包含密碼雜湊或驗證演算法；前端壓縮僅減少可讀性，並非加密或權限控制。讀取、刪除與清除的保護由 GAS 伺服器提供。

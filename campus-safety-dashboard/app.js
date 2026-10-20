@@ -1,5 +1,4 @@
-// Store only a salted password verifier; every deletion requires fresh authorization.
-const deletionVerifier={salt:'9c5fb8d9fb508c4abaecd927ade337eac5dc090a207e335e',hash:'a91e3694fae4dbb96ca04c2bfbc9742f197c0fc606bab72269e04c5f9b34b37c',iterations:600000};
+// Password verification is performed only by the GAS server.
 let deletionPending=false;
 async function authorizeDeletion(message, action){
  if(deletionPending)return false;
@@ -15,14 +14,8 @@ async function authorizeDeletion(message, action){
    event.preventDefault();submit.disabled=true;verifying=true;error.textContent='';
    let password=input.value;input.value='';
    try{
-    if(Cloud.connected){await Cloud.remove(action.id,password);password='';finish(true);return;}
-    const material=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveBits']);password='';
-    const salt=Uint8Array.from(deletionVerifier.salt.match(/../g),hex=>parseInt(hex,16));
-    const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt,iterations:deletionVerifier.iterations,hash:'SHA-256'},material,256);
-    if(settled)return;
-    const hash=Array.from(new Uint8Array(bits),byte=>byte.toString(16).padStart(2,'0')).join('');
-    if(hash===deletionVerifier.hash){finish(true);return}
-    error.textContent='密碼不正確，未刪除任何圖釘。';
+    if(!Cloud.connected)throw Error('尚未連上共用儲存服務，不能執行刪除。');
+    await Cloud.remove(action.id,password);password='';finish(true);return;
    }catch(e){if(!settled)error.textContent=e.message||'無法驗證密碼，請重新整理後再試。'}
    finally{password='';verifying=false;if(!settled){submit.disabled=false;input.focus()}}
   };
@@ -52,7 +45,7 @@ function selectPoint(id){
  const progress=point.followupStatus||'待確認';
  detail.innerHTML=`<span class="category">${layers[point.layer].label}</span><h3>${esc(point.title)}</h3><dl><div><dt>管理內容</dt><dd>${esc(point.asset)}</dd></div><div><dt>主責單位</dt><dd>${esc(point.owner)}</dd></div><div><dt>盤點說明</dt><dd>${esc(point.note)}</dd></div><div><dt>圖面座標</dt><dd>${point.x.toFixed(1)}% ／ ${point.y.toFixed(1)}%</dd></div></dl><div class="detail-status"><span class="status ${point.status}"></span>${point.status==='green'?'已有制度或資料':point.status==='amber'?'資料待確認或補強':'優先現場確認'}</div><form id="pinRecordForm" class="pin-record"><div class="record-heading"><div><p class="kicker">FOLLOW-UP RECORD</p><h4>提出與改善紀錄</h4></div><span class="record-badge">${esc(progress)}</span></div><label>提出人員<span>必填</span><input id="recordProposer" required value="${esc(point.proposer)}" placeholder="姓名或單位"></label><label>聯絡方式<span>選填</span><input id="recordContact" value="${esc(point.contact)}" placeholder="分機、電話或電子郵件"></label><label>說明理由／現場問題<span>必填</span><textarea id="recordReason" required rows="3" placeholder="例如：夜間照度不足，監視畫面無法辨識人員。">${esc(point.reason)}</textarea></label><label>建議改善方式<span>選填</span><textarea id="recordAction" rows="2" placeholder="例如：增設照明、調整鏡頭或加強巡邏。">${esc(point.action)}</textarea></label><label>處理進度<select id="recordProgress"><option ${progress==='待確認'?'selected':''}>待確認</option><option ${progress==='已通報'?'selected':''}>已通報</option><option ${progress==='改善中'?'selected':''}>改善中</option><option ${progress==='已完成'?'selected':''}>已完成</option></select></label><button class="save-record" type="submit">儲存改善紀錄</button><p class="record-note">${point.updatedAt?`上次更新：${esc(point.updatedAt)}`:'儲存後請確認上方同步狀態；尚未連接試算表時僅存於本機。'}</p></form>${point.custom?'<div class="detail-actions"><button class="delete-pin" id="deletePin">刪除這枚自訂圖釘</button></div>':''}`;
  const form=document.querySelector('#pinRecordForm');form.onsubmit=event=>{event.preventDefault();if(!form.reportValidity())return;point.proposer=document.querySelector('#recordProposer').value.trim();point.contact=document.querySelector('#recordContact').value.trim();point.reason=document.querySelector('#recordReason').value.trim();point.action=document.querySelector('#recordAction').value.trim();point.followupStatus=document.querySelector('#recordProgress').value;point.updatedAt=new Date().toLocaleString('zh-TW',{hour12:false});savePoints(point);selectPoint(id)};
- const deleteButton=document.querySelector('#deletePin');if(deleteButton)deleteButton.onclick=async()=>{if(!await authorizeDeletion('輸入管理密碼，刪除這枚圖釘及其改善紀錄。',{id}))return;if(Cloud.connected)return;points=points.filter(item=>item.id!==id);savePoints();selected=points[0]?.id;renderAll()};renderMarkers()
+ const deleteButton=document.querySelector('#deletePin');if(deleteButton)deleteButton.onclick=async()=>{await authorizeDeletion('輸入管理密碼，刪除這枚圖釘及其改善紀錄。',{id})};renderMarkers()
 }
 function pointFromEvent(event){const rect=mapStage.getBoundingClientRect();return{x:Math.max(0,Math.min(100,(event.clientX-rect.left)/rect.width*100)),y:Math.max(0,Math.min(100,(event.clientY-rect.top)/rect.height*100))}}
 function startDrag(event,id){if(!editMode)return;event.preventDefault();event.stopPropagation();dragging=id;event.currentTarget.setPointerCapture?.(event.pointerId);selectPoint(id)}
@@ -65,6 +58,6 @@ function setZoom(value){zoom=Math.min(1.5,Math.max(.75,value));mapStage.style.tr
 function renderAll(){renderLayers();renderMarkers();selectPoint(selected)}
 pinLayer.innerHTML=Object.entries(layers).map(([key,value])=>`<option value="${key}">${value.icon}　${value.label}</option>`).join('');pinLayer.value='visibility';pinLayer.onchange=()=>{if(addMode)pinHint.textContent=`請在地圖上點一下，新增「${layers[pinLayer.value].label}」圖釘。`};
 addPinButton.onclick=()=>setAddMode(!addMode);editPinsButton.onclick=()=>setEditMode(!editMode);
-document.querySelector('#resetPins').onclick=async()=>{if(await authorizeDeletion('輸入管理密碼，清除所有圖釘及其改善紀錄。',{id:null})){if(Cloud.connected)return;points=[];savePoints();selected=undefined;active=new Set(Object.keys(layers));renderAll()}};
+document.querySelector('#resetPins').onclick=async()=>{await authorizeDeletion('輸入管理密碼，清除所有圖釘及其改善紀錄。',{id:null})};
 document.querySelector('#resetLayers').onclick=()=>{Object.keys(layers).forEach(key=>active.add(key));renderLayers();renderMarkers()};document.querySelector('#zoomIn').onclick=()=>setZoom(zoom+.1);document.querySelector('#zoomOut').onclick=()=>setZoom(zoom-.1);
 document.querySelector('#issueList').innerHTML=issues.map(item=>`<div class="issue-row"><span class="priority" style="--p:${item.color}">${item.p}</span><strong>${item.text}</strong><span class="issue-owner">${item.owner}</span><span class="issue-date">${item.date}</span></div>`).join('');renderAll();

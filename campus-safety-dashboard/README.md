@@ -17,3 +17,5 @@
 - `styles.css`：視覺樣式
 - `app.js`：互動功能與本機資料儲存
 - `assets/campus-map-v3-no-track.png`：校園配置底圖
+- `assets/archive/`：設計過程保留的舊版校園底圖
+- `.openai/hosting.json`：靜態網站部署設定

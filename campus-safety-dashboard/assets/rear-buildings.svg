@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1492 1054" fill="none">
+  <title>立志樓後方：左側漾泉館，右側悅聞樓</title>
+  <!-- Keep the original map dimensions so existing percentage-based pins stay aligned. -->
+  <path d="M108 141H1403" stroke="white" stroke-width="9"/>
+  <path d="M58 141V8H1403V146" stroke="#252525" stroke-width="2.5"/>
+  <g stroke="#252525" stroke-width="2.5" fill="white">
+    <rect x="156" y="23" width="278" height="94"/>
+    <rect x="575" y="23" width="775" height="94"/>
+  </g>
+  <g font-family="Noto Sans TC,Microsoft JhengHei,sans-serif" text-anchor="middle">
+    <text x="295" y="61" fill="#176aa1" font-size="25" font-weight="700">漾泉館</text>
+    <text x="295" y="93" fill="#222" font-size="20">溫水游泳池</text>
+    <text x="962" y="58" fill="#d52a25" font-size="27" font-weight="700">悅聞樓（專科教室大樓）</text>
+    <text x="962" y="91" fill="#222" font-size="19">圖書館・電腦教室・理化實驗室・B1 避難空間</text>
+  </g>
+</svg>

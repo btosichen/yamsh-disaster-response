@@ -1,0 +1,25 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs'),crypto=require('node:crypto');
+function backend(){
+ const tables=new Map(),props=new Map(),cache=new Map();
+ class Sheet{constructor(name){this.rows=[];this.name=name;}getLastRow(){return this.rows.length;}getRange(r,c,n=1,m=1){return {getValues:()=>Array.from({length:n},(_,i)=>Array.from({length:m},(_,j)=>this.rows[r-1+i]?.[c-1+j]??'')),setValues:values=>{values.forEach((v,i)=>{this.rows[r-1+i]??=[];v.forEach((x,j)=>this.rows[r-1+i][c-1+j]=x);});return this.getRange(r,c,n,m);},setBackground(){return this;},setFontColor(){return this;},setFontWeight(){return this;}};}appendRow(row){this.rows.push(row);}setFrozenRows(){}setColumnWidths(){}setColumnWidth(){}}
+ const ss={getId:()=> '1kBAX215x-DrpNr9UYQLfTS2lmf_nVUK2c13gKuN5Jsc',getSheetByName:n=>tables.get(n),insertSheet:n=>{const s=new Sheet(n);tables.set(n,s);return s;}};
+ const ui={ButtonSet:{OK_CANCEL:1},Button:{OK:1},prompt:()=>({getSelectedButton:()=>1,getResponseText:()=> 'test-password-for-suite'}),alert(){}};
+ const ctx={console,SpreadsheetApp:{getActiveSpreadsheet:()=>ss,openById:()=>ss,getUi:()=>ui,flush(){}},PropertiesService:{getScriptProperties:()=>({getProperty:k=>props.get(k)||null,setProperty:(k,v)=>props.set(k,v),setProperties:o=>Object.entries(o).forEach(([k,v])=>props.set(k,v))})},CacheService:{getScriptCache:()=>({get:k=>cache.get(k)||null,put:(k,v)=>cache.set(k,v)})},Utilities:{getUuid:()=>crypto.randomUUID(),DigestAlgorithm:{SHA_256:1},Charset:{UTF_8:1},computeDigest:(_,s)=>[...crypto.createHash('sha256').update(s).digest()]},LockService:{getScriptLock:()=>({tryLock:()=>true,releaseLock(){}})},ContentService:{MimeType:{JSON:1},createTextOutput:text=>({setMimeType:()=>text})}};
+ vm.createContext(ctx);vm.runInContext(fs.readFileSync(__dirname+'/../gas/Code.gs','utf8'),ctx);ctx.install();const post=data=>JSON.parse(ctx.doPost({postData:{contents:JSON.stringify(data)}}));return {post,tables,props};
+}
+const point={id:'custom-test',layer:'space',title:'測試',x:20,y:30,status:'amber',reason:'問題'};
+test('requires login for reads and writes; no plaintext password persisted',()=>{const b=backend();assert.equal(b.post({action:'list'}).code,'AUTH');assert.equal(b.post({action:'upsert',point}).code,'AUTH');assert.equal(b.post({action:'login',password:'wrong'}).code,'PASSWORD');assert.ok(!JSON.stringify([...b.props]).includes('test-password-for-suite'));});
+test('incremental updates, stale write rejection, password deletion and tombstones',()=>{const b=backend(),token=b.post({action:'login',password:'test-password-for-suite'}).token;const call=(action,data={})=>b.post({action,token,...data});
+ let r=call('upsert',{point,expectedVersion:0,requestId:'one'});assert.equal(r.point.version,1);
+ r=call('upsert',{point,expectedVersion:0,requestId:'one'});assert.equal(r.point.version,1);assert.equal(b.tables.get('操作紀錄').rows.length,2);
+ assert.equal(call('upsert',{point,expectedVersion:0,requestId:'two'}).code,'CONFLICT');
+ call('upsert',{point:{...point,id:'second'},expectedVersion:0,requestId:'second'});assert.equal(call('list').points.length,2);
+ assert.equal(call('delete',{id:point.id,expectedVersion:1,password:'wrong'}).code,'PASSWORD');assert.equal(call('list').points.length,2);
+ assert.equal(call('delete',{id:point.id,expectedVersion:1,password:'test-password-for-suite'}).ok,true);assert.equal(call('list').points.length,1);
+ assert.equal(call('upsert',{point,expectedVersion:0,requestId:'one'}).code,'DELETED');
+ const rev=call('list').revision;assert.equal(call('clear',{password:'test-password-for-suite',expectedRevision:rev-1}).code,'CONFLICT');
+ assert.equal(call('clear',{password:'test-password-for-suite',expectedRevision:rev}).ok,true);assert.equal(call('list').points.length,0);assert.equal(b.tables.get('校園安全圖釘').rows.length,3);
+});
+test('rejects invalid coordinates and prevents sheet formulas',()=>{const b=backend(),token=b.post({action:'login',password:'test-password-for-suite'}).token;assert.equal(b.post({action:'upsert',token,point:{...point,x:101},expectedVersion:0}).code,'INVALID');b.post({action:'upsert',token,point:{...point,title:'=IMPORTXML("https://example.com")'},expectedVersion:0});assert.match(b.tables.get('校園安全圖釘').rows[1][4],/^'=/);});
+
+module.exports={backend};

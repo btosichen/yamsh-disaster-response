@@ -29,6 +29,10 @@
       <article><span class="metric-label">圖面資料</span><strong>3</strong><small>位置、避難、教室</small></article>
     </section>
 
+    <section class="cloud-bar" aria-label="共用儲存">
+      <div><b>共用試算表儲存</b><p id="cloudStatus" role="status">尚未連接，目前儲存於本機</p></div>
+      <div class="cloud-buttons"><button id="cloudConnect">連接共用試算表</button><button id="cloudRefresh" hidden>載入最新資料</button><button id="cloudRetry" hidden>重試同步</button><button id="cloudImport" hidden>匯入原本機圖釘</button><button id="cloudBackup" hidden>下載備份</button></div>
+    </section>
     <section class="workspace">
       <aside class="panel filters">
         <div class="panel-heading">
@@ -72,7 +76,7 @@
             <div id="markers" class="markers"></div>
           </div>
         </div>
-        <div class="map-note">點選圖釘查看資料；開啟移動模式後可直接拖曳。自訂點位會保存在這台裝置的瀏覽器中。</div>
+        <div class="map-note">點選圖釘查看資料；開啟移動模式後可直接拖曳。<span id="mapStorageNote">圖釘暫存於這台裝置；連接共用試算表後可跨裝置存取。</span></div>
       </section>
 
       <aside class="panel detail" id="detailPanel" aria-live="polite">
@@ -103,7 +107,7 @@
     </section>
   </main>
 
-  <footer>本頁依現有消防防護計畫、防護團名冊及緊急應變小組資料製作｜圖釘位置儲存於本機瀏覽器</footer>
+  <footer>本頁依現有消防防護計畫、防護團名冊及緊急應變小組資料製作｜可連接共用試算表儲存圖釘與改善紀錄</footer>
   <dialog id="deleteAuthDialog" class="delete-auth" aria-labelledby="deleteAuthTitle" aria-describedby="deleteAuthMessage">
     <form id="deleteAuthForm">
       <h2 id="deleteAuthTitle">刪除圖釘確認</h2>
@@ -111,9 +115,18 @@
       <label for="deleteAuthPassword">管理密碼</label>
       <input id="deleteAuthPassword" type="password" required autocomplete="off" autocapitalize="off" spellcheck="false">
       <p id="deleteAuthError" role="alert"></p>
-      <div class="delete-auth-actions"><button type="button" onclick="this.closest('dialog').close()">取消</button><button type="submit">驗證並刪除</button></div>
+      <div class="delete-auth-actions"><button id="deleteAuthCancel" type="button">取消</button><button type="submit">驗證並刪除</button></div>
+    </form>
+  </dialog>
+  <dialog id="cloudDialog" class="delete-auth" aria-labelledby="cloudTitle">
+    <form id="cloudForm"><h2 id="cloudTitle">連接共用試算表</h2>
+      <p>首次連接會載入共用資料，原本機圖釘會保留，可再按「匯入原本機圖釘」。</p>
+      <label for="cloudUrl">共用儲存連線網址</label><input id="cloudUrl" type="url" required placeholder="https://script.google.com/macros/s/…/exec">
+      <label for="cloudPassword">管理密碼</label><input id="cloudPassword" type="password" required autocomplete="off">
+      <p id="cloudError" role="alert"></p><div class="delete-auth-actions"><button type="button" onclick="this.closest('dialog').close();document.querySelector('#cloudPassword').value=''">取消</button><button type="submit">連接並載入</button></div>
     </form>
   </dialog>
   <script src="app.js"></script>
+  <script src="cloud.js"></script>
 </body>
 </html>

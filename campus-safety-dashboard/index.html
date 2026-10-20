@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071b2c">
+  <title>陽明高中校園安全總覽</title>
+  <meta name="description" content="校園安全空間、設備、路線、責任與改善事項的一頁式互動總覽">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">臺北市立陽明高級中學</p>
+      <h1>校園安全總覽</h1>
+    </div>
+    <div class="header-meta">
+      <span class="live-dot">示範資料</span>
+      <span>資料盤點版 v1</span>
+      <span>更新日期 2026.10.20</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="metrics" aria-label="安全摘要">
+      <article><span class="metric-label">安全業務</span><strong>7</strong><small>個管理面向</small></article>
+      <article><span class="metric-label">待確認</span><strong class="amber">5</strong><small>項優先工作</small></article>
+      <article><span class="metric-label">求救與通報</span><strong>12+</strong><small>設備與管道</small></article>
+      <article><span class="metric-label">圖面資料</span><strong>3</strong><small>位置、避難、教室</small></article>
+    </section>
+
+    <section class="workspace">
+      <aside class="panel filters">
+        <div class="panel-heading">
+          <div><p class="kicker">MAP LAYERS</p><h2>安全圖層</h2></div>
+          <button id="resetLayers" class="text-button">全部顯示</button>
+        </div>
+        <div id="layerList" class="layer-list"></div>
+        <div class="pin-tools">
+          <p class="kicker">PIN TOOLS</p>
+          <label for="pinLayer">新增圖釘類型</label>
+          <select id="pinLayer" aria-label="新增圖釘類型"></select>
+          <button id="addPin" class="tool-button primary">＋ 點圖新增圖釘</button>
+          <button id="editPins" class="tool-button">↔ 開啟移動模式</button>
+          <button id="resetPins" class="tool-button subtle">清除所有圖釘</button>
+          <p id="pinHint" class="pin-hint">選擇圖層後，可在地圖上新增圖釘。</p>
+        </div>
+        <div class="legend">
+          <p class="kicker">STATUS</p>
+          <div><span class="status red"></span>立即確認</div>
+          <div><span class="status amber"></span>待盤點或改善</div>
+          <div><span class="status green"></span>已有制度</div>
+        </div>
+      </aside>
+
+      <section class="map-panel" aria-label="互動式校園安全地圖">
+        <div class="map-toolbar">
+          <div>
+            <p class="kicker">INTERACTIVE CAMPUS MAP</p>
+            <h2>校園安全配置圖</h2>
+          </div>
+          <div class="map-actions">
+            <button id="zoomOut" aria-label="縮小">−</button>
+            <span id="zoomValue">100%</span>
+            <button id="zoomIn" aria-label="放大">＋</button>
+          </div>
+        </div>
+        <div class="map-viewport" id="mapViewport">
+          <div class="map-stage" id="mapStage">
+            <img src="assets/campus-map-v3-no-track.png" alt="陽明高中校園建築配置圖">
+            <div id="markers" class="markers"></div>
+          </div>
+        </div>
+        <div class="map-note">點選圖釘查看資料；開啟移動模式後可直接拖曳。自訂點位會保存在這台裝置的瀏覽器中。</div>
+      </section>
+
+      <aside class="panel detail" id="detailPanel" aria-live="polite">
+        <p class="kicker">SELECTED LOCATION</p>
+        <div id="detailContent"></div>
+      </aside>
+    </section>
+
+    <section class="lower-grid">
+      <article class="panel issues">
+        <div class="panel-heading">
+          <div><p class="kicker">PRIORITY ACTIONS</p><h2>優先改善事項</h2></div>
+          <span class="pill">5 項</span>
+        </div>
+        <div id="issueList"></div>
+      </article>
+      <article class="panel ownership">
+        <div class="panel-heading">
+          <div><p class="kicker">OWNERSHIP</p><h2>業務權責</h2></div>
+        </div>
+        <div class="owner-grid">
+          <div><span>總務處／事務組</span><p>空間、照明、門禁、消防與設備維護</p></div>
+          <div><span>校安中心／傳達室</span><p>巡邏、監視、人員管制與緊急通報</p></div>
+          <div><span>學務處／避難引導組</span><p>學生疏散、集合點名與秩序維持</p></div>
+          <div><span>健康中心／救護組</span><p>急救設備、救護站及傷患處置</p></div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>本頁依現有消防防護計畫、防護團名冊及緊急應變小組資料製作｜圖釘位置儲存於本機瀏覽器</footer>
+  <script src="app.js"></script>
+</body>
+</html>
